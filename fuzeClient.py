@@ -13,6 +13,9 @@ elev = '00000'
 
 
 class serverCommands(threading.Thread):
+#Class responsible for communicating with the magServer
+#Sends GPS Data
+#Communicates fuse data
 
    def __init__(self):
       threading.Thread.__init__(self)
@@ -23,6 +26,8 @@ class serverCommands(threading.Thread):
       port = 4445
       size = 1024
       ephemeris = ''
+
+      #Initialize socket using default address family and default socket type
       s = socket(AF_INET, SOCK_STREAM)
       id = '4'
       setting = 0
