@@ -58,7 +58,7 @@ class socketThread(threading.Thread):
       print 'socket closed'
 
 
-class updateList(threading.Thread):
+class updateList(threading.Thread):				##List of all mortars in magazine
    def __init__(self, parent, clntSock):
       threading.Thread.__init__(self)
       self.parent = parent
@@ -76,7 +76,7 @@ class updateList(threading.Thread):
          #time.sleep(0.5)
          ack = True
          try:
-            message = self.clntSock.recv(1024)
+            message = self.clntSock.recv(1024)	
          except:
             pass
          try:
@@ -89,7 +89,7 @@ class updateList(threading.Thread):
 
 
 
-   def ping(self, fuze):
+   def ping(self, fuze):							##Scrubs current line-up of mortars
      global mortars,lock
      ack = True
      while 1: 
@@ -99,23 +99,23 @@ class updateList(threading.Thread):
       for x in range(0,900000):
          if x == 899999:
             ack = False
-         try:
-             message = self.clntSock.recv(1024)
+         try:													##Checks to make sure rounds have correct data
+             message = self.clntSock.recv(1024)			
              if message:
                 print message
-                if message[0:6] == self.id + ' here':
+                if message[0:6] == self.id + ' here':		##Round Present
                    ack = True
                    if message[7:8] == self.setting:
                       if message[9:23] == self.gps:
                          if message[24:] == self.elev:
                             pass
-                   else:
+                   else:									##Corrects it if not
                       self.setting = message[7:8]
                       self.gps = message[9:23]
                       self.elev = message[24:]
                       for item in mortars:
                          if item == fuze:
-                            with lock:
+                            with lock:						##Connects to fuze to make changes
                                print 'lock acquired'
                                item[1] = self.setting
                                item[2] = self.gps
@@ -125,7 +125,7 @@ class updateList(threading.Thread):
                       print 'data change'
                       self.sendToTab()
                    break
-                else:
+                else:										#Bad Round
                     print 'this round is defunct or fake'
                     for item in mortars:
                        if item == fuze:
@@ -139,11 +139,11 @@ class updateList(threading.Thread):
                     #self.parent.killThread(self)
              else:
                 if x == 899999:
-                   print 'outer else'
+                   print 'outer else'				##Testing purposes
                    ack = False
          except:
             if x == 899999:
-               print 'pass statement'
+               print 'pass statement'				##Testing purposes
                ack = False
       if ack == False:
          print 'remove mortar'
@@ -158,7 +158,7 @@ class updateList(threading.Thread):
          self.clntSock.close()
          return
 
-   def update(self, message):
+   def update(self, message):			##updates what the mortar is listed as
       global mortars, lock
       id = message[0:1]
       setting = message[2:3]
@@ -173,11 +173,11 @@ class updateList(threading.Thread):
       self.sendToTab()
       return fuze
 
-   def sendToRound(self,message):
-      self.clntSock.send(message)
+   def sendToRound(self,message):		##Self explanitory
+      self.clntSock.send(message)		##Can't find clntSock.send
 
 
-   def sendToTab(self):
+   def sendToTab(self):				
       global mortars
       string = '<list>'
       for item in mortars:
@@ -195,34 +195,34 @@ class serverThread(threading.Thread):
 
    def __init__(self, serverIP, serverPort):
       threading.Thread.__init__(self)
-      self.threadCount = 0
-      self.myThreads = []
-      self.serverIP = serverIP
+      self.threadCount = 0		##Number of threads			Currently Never Updates
+      self.myThreads = []		##Array of threads
+      self.serverIP = serverIP	
       self.serverPort = serverPort
       self.sendLock = threading.Lock()
 
 
    def run(self):
       global hasEph, ephemeris, pingPort, mortars, piThreads, lock
-      serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-      serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-      serverSocket.bind((self.serverIP, self.serverPort))
+      serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  ##Address and Socket type.  Predefined constants
+      serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) ##
+      serverSocket.bind((self.serverIP, self.serverPort)) ##bind new socket to main thread
       serverSocket.listen(20)
       while 1:
-         connectionSocket, addr = serverSocket.accept()
-         if self.serverPort == pingPort:
+         connectionSocket, addr = serverSocket.accept() ##reconnects sockets
+         if self.serverPort == pingPort:								##If pingthread, update list of mortars
            pingServer = updateList(self, connectionSocket)
-           self.myThreads.append(pingServer)
+           self.myThreads.append(pingServer)							##Adds all mortars to list of threads
            pingServer.start()
          else:
             newClient = socketThread(self, connectionSocket)
-            self.myThreads.append(newClient)
+            self.myThreads.append(newClient)							##Adds new thread to myThreads
             newClient.start()
-            if self.serverPort == piPort:
-               lock.acquire()
+            if self.serverPort == piPort:								##If PiThread:
+               lock.acquire()												##Print info from each mortar in html(?)
                print mortars
                string = '<list>'
-               for item in mortars:
+               for item in mortars:										
                   string += item[0] + ',' + item[1] + ',' + item[2] + ',' + item[3] + ';'
                string += '</list>\n'
                try:
@@ -233,11 +233,11 @@ class serverThread(threading.Thread):
                lock.release()
          print 'new client on ' + self.serverIP
          if hasEph and self.serverIP == '192.168.1.1' and self.serverPort != pingPort:
-            newClient.clntSock.send(ephemeris)
+            newClient.clntSock.send(ephemeris)					##If PiHost, send GPS Ephemeris
             print 'ephemeris sent to new client'
-         for thread in self.myThreads:
-            if not thread.isAlive():
-               thread.join()
+         for thread in self.myThreads:					##scrubs myThreads
+            if not thread.isAlive():	
+               thread.join()						##Should be killThread(thread)
                self.myThreads.remove(thread)
                if self.serverIP == '192.168.1.1':
                   piThreads -= 1
@@ -256,7 +256,7 @@ class serverThread(threading.Thread):
 #            thread.clntSock.send(message)
 #            self.sendLock.release()
 
-   def killThread(self,thread):
+   def killThread(self,thread):			##Removes thread from myThreads
       global piThreads
       thread.join()
       self.myThreads.remove(thread)
