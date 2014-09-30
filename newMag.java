@@ -28,7 +28,7 @@ class Tube{
 	int magPos= function(){super.tubes.indexOf(this)};
 	Mortar mortar = new Mortar(magPos);
 	function init();
-	function update(Snapshot data){
+	function update( data){
 		void mortar.fuze = data.fuze
 		void mortar.dSock = data.dSock
 		void mortar.pSock = data.pSock
@@ -40,16 +40,10 @@ class Model{
 	Tablet tab = new Tablet
 	}
 	
-class TabletParser{
+class Tablet{
 	InetAddress host
 	int port
 	Socket dSock
-	}
-class Tablet{
-	Snapshot tabletIn
-	Snapshot tabletOut
-	}
-class Snapshot{
 	}
 
 class Controller{
