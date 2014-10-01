@@ -5,21 +5,16 @@ class Magazine(int capacity) extends ArrayList {
 			void tubes = new Tube() +: tubes
 		}
 	}
-	public void function advanceTubes(){
+	public void function rotate(){
 		void tubes = tubes.add(tubes(0))
 		void tubes = tubes.remove(tubes(0))
 		}
-	public void function update(Tablet tab){
-		for (i = 0; i<capacity: i++){
-			tubes(i).update(tab)
-			}
-		}
-	function apply(int num){
+	public Tube function apply(int num){
 		Tube tubes(num)
 		}
 	
-class Mortar(int ID){
-	int fuze = 0;
+class Mortar(int ID){ //need function for after the mortar leaves
+	String fuze = "0"
 	String gps = "AA000000000000"
 	String elev = "00000"
 	String message = ("iam "+ID+","+fuze+","+gps+","+elev)
@@ -28,25 +23,31 @@ class Mortar(int ID){
 	Socket dSock
 	datagramSocket pSock
 	var boolean stillThere
-	public void function notify(){
+	public void function sendSelf(){
 	//sends message to actual, using whatever sockets it needs
 	}
-	public boolean function getPing(){
-		//listens for ping?
+	public void function updateSelf(String newFuze, String newGps, String newElev){		//takes info from controller, changes data on mortar
+		void fuze = newFuze
+		void gps = newGps
+		void elev = newElev
 		}
-		
-		}
-	
+	public void function recieveData(String message){
+		if message.substring(0,2) == "iam"{
+			receiveIAm(message)
+			};
+		else if (message.substring(1,6)==" here"){
+			stillHere = true //send message back to mortar that is ID+" acknowledge"
+			};
+		};
+	public void function receiveIAm(String newMessage){	//update self based on message
+		updateSelf(newMessage.substring(2,3),newMessage.substring(4,18),newMessage.substring(0,1),(19,23));
+		super.super.super.updateTablet();
+		}; 
+
 class Tube{
 	int magPos= function(){super.tubes.indexOf(this)};
 	Mortar mortar = new Mortar(magPos);
-	function init();
-	function update(Tablet tab){
-		void mortar.fuze = tab.fuze
-		void mortar.dSock = tab.dSock
-		void mortar.pSock = tab.pSock
-		boolean true
-	}
+	};
 
 	
 class Tablet{
@@ -57,8 +58,7 @@ class Tablet{
 	public void function send(String message){
 		//send message to tablet (using fairy magic)
 		}
-	public void function notify(){}
-	public void receiveData(String message){
+	public void receiveData(String message){ //gets data from actual tablet, sends up to controller to update mortar object
 		int ID = message.substring(0,1).toInt;
 		String fuze = message.substring(2);
 		String gps = message.substring(3,16);
@@ -78,7 +78,7 @@ class Controller{
 		//sends fire signal
 		void rotateMagazine(1)
 		}
-	public void function updateTablet(){
+	public void function updateTablet(){ //sends data from magazine to tablet to send
 		void tablet.send(String "<list>")
 		for (i=0;i<mag.capacity;i++){
 			String message = mag(i).mortar.ID +","+mag(i).mortar.fuze+","mag(i).mortar.gps+","+mag(i).mortar.elev+";"
@@ -86,10 +86,11 @@ class Controller{
 			}
 		void tablet.send(String "</list>\n")
 		}
-	public void function updateMortar(Int ID, String fuze, String gps, String elev){
+	public void function updateMortar(Int ID, String fuze, String gps, String elev){  //takes message from Tablet to mortar, then updates actual mortar
 		for (i=0;i<mag.capacity;i++){
 			if (mag(i).mortar.ID==ID)
 				mag(i).mortar.updateSelf(fuze, gps, elev)
-		
-		
+				mag(i).mortar.sendSelf()
+				}
+			}
 	}
