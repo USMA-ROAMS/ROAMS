@@ -1,6 +1,7 @@
 import java.net.Socket
 import java.io.OutputStream
 import java.io.InputStream
+import java.net.ServerSocket
 
 class Magazine(int capacity) extends ArrayList {
 	ArrayList[] tubes =  new ArrayList(capacity);
@@ -45,12 +46,14 @@ class Mortar(int ID){ //need function for after the mortar leaves
 	public void function receiveIAm(String newMessage){	//update self based on message
 		updateSelf(newMessage.substring(2,3),newMessage.substring(4,18),newMessage.substring(0,1),(19,23));
 		super.super.super.updateTablet();
-		}; 
-
+	};
+	mortarListener = new MortarSocket()
+	mortarListener.start()
+}
 class MortarSocket implements Runnable{
   clHost ="192.168.1.1";
-	int clPort = 4445;
-	dSock = new Socket(clHost, clPort);
+  int clPort = 4445;
+  dSock = new Socket(clHost, clPort);
   OutputStreamWriter os = new OutputStreamWriter(dSock.getOutputStream(), "UTF-8"); //For sending:: Use .write to send data over os
   BufferedReader is = new BufferedReader(new InputStreamReader(dSock.getInputStream())); //For receiving::
 
@@ -95,9 +98,21 @@ class Tablet{
 class TabletSocket{
   InetAddress host = "192.168.0.1";
 	int port = 4444;
-  dSock = new Socket(host, port);
-  public void listener(){
-  }
+	dSock = new Socket(clHost, clPort);
+	  OutputStreamWriter os = new OutputStreamWriter(dSock.getOutputStream(), "UTF-8"); //For sending:: Use .write to send data over os
+	  BufferedReader is = new BufferedReader(new InputStreamReader(dSock.getInputStream())); //For receiving::
+
+	  public void sendToSocket(String message){
+	    os.write(message)
+	  }
+	  
+	  public void run(){
+	    String message = "";
+	    while((str = is.readLine()) != null) {
+	      message = message + str
+	    }
+	    super.receiveData(message)
+	  }
 }
 
 class Controller{
