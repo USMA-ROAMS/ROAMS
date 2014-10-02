@@ -1,3 +1,7 @@
+import java.net.Socket
+import java.io.OutputStream
+import java.io.InputStream
+
 class Magazine(int capacity) extends ArrayList {
 	ArrayList[] tubes =  new ArrayList(capacity);
 	public void function init(){
@@ -18,14 +22,12 @@ class Mortar(int ID){ //need function for after the mortar leaves
 	String gps = "AA000000000000";
 	String elev = "00000";
 	String message = ("iam "+ID+","+fuze+","+gps+","+elev);
-	InetAddress clHost;
-	int clPot;
-	Socket dSock;
-	datagramSocket pSock;
 	var boolean stillThere;
-	public void function sendSelf(){
-	//sends message to actual, using whatever sockets it needs
+  
+	public void function sendSelf(String message){
+    self.MortarSocket.sendToSocket(message)
 	}
+  
 	public void function updateSelf(String newFuze, String newGps, String newElev){		//takes info from controller, changes data on mortar
 		void fuze = newFuze;
 		void gps = newGps;
@@ -39,10 +41,37 @@ class Mortar(int ID){ //need function for after the mortar leaves
 			stillHere = true //send message back to mortar that is ID+" acknowledge"
 			};
 		};
+    
 	public void function receiveIAm(String newMessage){	//update self based on message
 		updateSelf(newMessage.substring(2,3),newMessage.substring(4,18),newMessage.substring(0,1),(19,23));
 		super.super.super.updateTablet();
 		}; 
+
+class MortarSocket implements Runnable{
+  clHost ="192.168.1.1";
+	int clPort = 4445;
+	dSock = new Socket(clHost, clPort);
+  OutputStreamWriter os = new OutputStreamWriter(dSock.getOutputStream(), "UTF-8"); //For sending:: Use .write to send data over os
+  BufferedReader is = new BufferedReader(new InputStreamReader(dSock.getInputStream())); //For receiving::
+
+  public void sendToSocket(String message){
+    os.write(message)
+  }
+  
+  public void run(){
+    String message = "";
+    while((str = is.readLine()) != null) {
+      message = message + str
+    }
+    super.receiveData(message)
+  }
+}
+
+class MortarPing implements Runnable{
+  pingHost = "192.168.1.1";
+  int pingPort = 4446;
+  pingSock = new Socket(pingHost, pingPort);
+}
 
 class Tube{
 	int magPos= function(){super.tubes.indexOf(this)};
@@ -52,9 +81,6 @@ class Tube{
 	
 class Tablet{
 	String state = 0;
-	InetAddress host;
-	int port;
-	Socket dSock;
 	public void function send(String message){
 		//send message to tablet (using fairy magic)
 		}
@@ -66,6 +92,13 @@ class Tablet{
 		super.updateMortar(ID, fuze, gps, elev)}
 	}
 	
+class TabletSocket{
+  InetAddress host = "192.168.0.1";
+	int port = 4444;
+  dSock = new Socket(host, port);
+  public void listener(){
+  }
+}
 
 class Controller{
 	Tablet tab = new Tablet;
