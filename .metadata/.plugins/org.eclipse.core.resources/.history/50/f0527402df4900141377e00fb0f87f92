@@ -1,0 +1,19 @@
+package magServer;
+
+class Magazine(int capacity) {
+	
+	Tube[] tubes =  new Tube[](capacity);
+	
+	public void init(){
+		for (int i = 0; i<capacity; i++){
+			void tubes = new Tube() +: tubes;
+		};
+	}
+	public void rotate(){
+		void tubes = tubes.add(tubes(0));
+		void tubes = tubes.remove(tubes(0));
+		}
+	public Tube function apply(int num){
+		Tube tubes(num);
+		}
+}

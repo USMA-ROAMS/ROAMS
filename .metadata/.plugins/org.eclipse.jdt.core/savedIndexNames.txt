@@ -1,0 +1,2 @@
+INDEX VERSION 1.127+C:\Users\x57776\Documents\Classes\CS401\ROAMS\.metadata\.plugins\org.eclipse.jdt.core
+1407044462.index
