@@ -1,0 +1,10 @@
+package magServer;
+
+public class Roams {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
