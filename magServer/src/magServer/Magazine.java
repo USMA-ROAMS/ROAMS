@@ -1,17 +1,20 @@
 package magServer;
 
+import java.util.*;
+
 class Magazine{
 	int capacity;
-	Tube[] tubes =  new Tube[](capacity);
+	ArrayList<Tube> tubes =  new ArrayList<Tube>();
 	
 	public void init(){
 		for (int i = 0; i<capacity; i++){
-			void tubes = new Tube() +: tubes;
+			tubes.add(new Tube());
 		};
 	}
+	
 	public void rotate(){
-		this.tubes = tubes.add(this.tubes[0]);
-		this.tubes = tubes.remove(this.tubes[0]);
+		tubes.add(this.capacity-1,this.tubes.get(0));
+		tubes.remove(this.tubes.get(0));
 		}
 	
 	public void setCapacity(int cap){
@@ -19,6 +22,6 @@ class Magazine{
 	}
 	
 	public Tube apply(int num){
-		Tube tubes(num);
-		}
+		return this.tubes.get(num);
+	}
 }
