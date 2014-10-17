@@ -1,13 +1,16 @@
 package magServer;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 class Mortar extends Controller { //need function for after the mortar leaves
-	int 			fuze = 0;
-	int 			ID; 
-	String 			gps = "AA000000000000";
-	String 			elev = "00000";
-	String 			message = ("iam "+ ID +","+ fuze + "," + gps + "," + elev);
-	boolean 		stillThere;
-	ChildSocket 	mortarListener = new ChildSocket();
+	int 								fuze = 0;
+	int 								ID; 
+	String 								gps = "AA000000000000";
+	String 								elev = "00000";
+	String 								message = ("iam "+ Integer.toString(ID) +","+ Integer.toString(fuze) + "," + gps + "," + elev);
+	boolean 							stillThere;
+	ChildSocket 						mortarListener = new ChildSocket();
+	private final ReentrantLock			lock = new ReentrantLock();
   
 	public void setFuze(int ID){
 		this.fuze = ID;

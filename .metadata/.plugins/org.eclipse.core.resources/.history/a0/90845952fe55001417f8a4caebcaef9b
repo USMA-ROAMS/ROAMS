@@ -1,0 +1,20 @@
+package magServer;
+
+class Tablet extends Controller{
+	int 				state = 0;
+	System.out.println();
+	ChildSocket			tabletListener = new ChildSocket();
+	
+	public void send(String message){
+		this.tabletListener.sendToSocket(message);
+	}
+	
+	public void receiveData(String message){ //gets data from actual tablet, sends up to controller to update mortar object
+		int ID = Integer.parseInt(message.substring(0,1));
+		int fuze = Integer.parseInt(message.substring(2));
+		String gps = message.substring(3,16);
+		String elev = message.substring(17,21);
+		super.updateMortar(ID, fuze, gps, elev);
+	}
+}
+	

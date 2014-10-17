@@ -1,8 +1,16 @@
 package magServer;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 class Tablet extends Controller{
-	int 				state = 0;
-	ChildSocket			tabletListener = new ChildSocket();
+	
+	int 							state = 0;
+	TabletChildSocket				tabletListener;
+	private final ReentrantLock		lock = new ReentrantLock();
+	
+	public void init(){
+		tabletListener = new TabletChildSocket();
+	}
 	
 	public void send(String message){
 		this.tabletListener.sendToSocket(message);

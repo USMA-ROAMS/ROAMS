@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class WelcomeSocket extends Controller implements Runnable {
-	String host;
-	int port;
-	ServerSocket sock;
-	InetSocketAddress addr;
+	String 								host;
+	int 								port;
+	ServerSocket 						sock;
+	InetSocketAddress 					addr;
+	private final ReentrantLock			lock = new ReentrantLock();
 
 	public void init(String newHost, int newPort) throws IOException {
 		this.host = newHost;

@@ -5,18 +5,20 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.concurrent.locks.ReentrantLock;
 
 class ChildSocket extends Mortar implements Runnable {
-	  Socket dSock;
-	  OutputStreamWriter os;
-	  BufferedReader is;
+	Socket 								dSock;
+	OutputStreamWriter 					os;
+	BufferedReader 						is;
+	private final ReentrantLock			lock = new ReentrantLock();
   
-  public void acceptSocket(Socket newSock) throws Exception {
+	public void acceptSocket(Socket newSock) throws Exception {
 	  this.dSock = newSock;
 	  create();
   }
   
-  public void create() throws Exception {
+	public void create() throws Exception {
 	  this.os = new OutputStreamWriter(dSock.getOutputStream(), "UTF-8"); //For sending:: Use .write to send data over os
 	  this.is = new BufferedReader(new InputStreamReader(dSock.getInputStream())); //For receiving::
   }

@@ -1,12 +1,15 @@
 package magServer;
 
 import java.io.IOException;
+import java.util.concurrent.locks.ReentrantLock;
 
 class Controller {
-	Tablet 				tablet;
-	Magazine 			mag;
-	WelcomeSocket 		mortarListener;
-	WelcomeSocket 		tabletListener;
+	Tablet 							tablet;
+	Magazine 						mag;
+	WelcomeSocket 					mortarListener;
+	WelcomeSocket 					tabletListener;
+	public int 						ThreadCount;
+	private final ReentrantLock		lock = new ReentrantLock();
 	
 	
 	public void rotateMagazine(int num){
@@ -20,18 +23,68 @@ class Controller {
 	}
 	
 	public void init() throws IOException {
+		System.out.println("Initializing Tablet Object");
 		this.tablet = new Tablet();
+		tablet.init();
+		System.out.println("Tablet Objected Initialized");
+		System.out.println("Initializing Magazine Object");
 		this.mag = new Magazine();
+		mag.init(20);
+		System.out.println("Magazine Object Initialized");
 		
 		String mortarAddr = "192.168.1.1";
 		String tabletAddr = "192.168.0.1";
 		
-		this.mortarListener = new WelcomeSocket();
-		this.mortarListener.init(mortarAddr, 4445);
+		int timeoutCounter = 0;
 		
-		this.tabletListener = new WelcomeSocket();
-		this.tabletListener.init(tabletAddr, 4444);
+		while (timeoutCounter < 3){
+			try {
+				System.out.println("Attempting to bind welcome socket to " + mortarAddr + " on port " + "4445");
+				this.mortarListener = new WelcomeSocket();
+				this.mortarListener.init(mortarAddr, 4445);
+				System.out.println("Bound successfully!");
+				timeoutCounter = 0;
+				break;
+			} catch (java.net.BindException e) {
+				timeoutCounter ++;
+				System.out.println("Couldn't bind to " + mortarAddr);
+				System.out.println("Failed " + Integer.toString(timeoutCounter) + " times.");
+				try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		}
 		
+		if (timeoutCounter >= 3) {
+			//TODO Implement code to kill the server neatly if the attempted bind times out 3 times
+		}
+		
+		while (timeoutCounter < 3){
+			try {
+				System.out.println("Attempting to bind welcome socket to " + tabletAddr + " on port " + "4444");
+				this.tabletListener = new WelcomeSocket();
+				this.tabletListener.init(tabletAddr, 4444);
+				System.out.println("Bound successfully!");
+				break;
+			} catch (java.net.BindException e) {
+				timeoutCounter ++;
+				System.out.println("Couldn't bind to " + tabletAddr);
+				System.out.println("Failed " + Integer.toString(timeoutCounter) + " times.");
+				try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		}
+		
+		if (timeoutCounter >= 3) {
+			//TODO Implement code to kill the server neatly if the attempted bind times out 3 times
+		}
 	}
 	
 	public void fire(){
@@ -46,6 +99,10 @@ class Controller {
 			tablet.send(tube.mortar.makeMessage());
 			tablet.send("</list>\n");
 		}
+	}
+	
+	public void closeGracefully(){
+		//TODO Implement code that will kill all of the open connections and running threads gracefully
 	}
 	
 	public void updateMortar(int ID, int fuze, String gps, String elev){  //takes message from Tablet to mortar, then updates actual mortar

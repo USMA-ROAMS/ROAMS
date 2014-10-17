@@ -5,11 +5,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.concurrent.locks.ReentrantLock;
 
 class TabletChildSocket extends Tablet implements Runnable {
-	  Socket dSock;
-	  OutputStreamWriter os;
-	  BufferedReader is;
+	  Socket 							dSock;
+	  OutputStreamWriter 				os;
+	  BufferedReader 					is;
+	  private final ReentrantLock		lock = new ReentrantLock();
   
   public void acceptSocket(Socket newSock) throws Exception {
 	  this.dSock = newSock;
@@ -23,9 +25,8 @@ class TabletChildSocket extends Tablet implements Runnable {
   
   public void sendToSocket(String message){
 	  try {
-    os.write(message);
-	  }
-	  catch (IOException e) {System.out.println("error");}
+		  os.write(message);
+	  } catch (IOException e) {System.out.println("error");}
   }
   
   public void run(){
