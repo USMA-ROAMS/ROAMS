@@ -1,0 +1,11 @@
+package magServer;
+
+public class welcomeSocket {
+	String 			host;
+	int 			port; 
+	
+	public void init(String newHost, int newPort){
+		this.host = newHost;
+		this.port = newPort;	
+	}
+}

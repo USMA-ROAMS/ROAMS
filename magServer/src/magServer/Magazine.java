@@ -3,13 +3,17 @@ package magServer;
 import java.util.*;
 
 class Magazine{
-	int capacity;
+	public int capacity;
 	ArrayList<Tube> tubes =  new ArrayList<Tube>();
 	
 	public void init(){
 		for (int i = 0; i<capacity; i++){
 			tubes.add(new Tube());
 		};
+	}
+	
+	public int getCapacity(){
+		return this.capacity;
 	}
 	
 	public void rotate(){

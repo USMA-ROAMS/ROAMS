@@ -1,8 +1,14 @@
 package magServer;
 
-class Controller{
-	Tablet tablet = new Tablet();
-	Magazine mag = new Magazine();
+import java.io.IOException;
+
+class Controller {
+	Tablet 				tablet;
+	Magazine 			mag;
+	WelcomeSocket 		mortarListener;
+	WelcomeSocket 		tabletListener;
+	
+	
 	public void rotateMagazine(int num){
 		for(int i = 0;i<num;i++){
 			mag.rotate();
@@ -13,9 +19,19 @@ class Controller{
 		}
 	}
 	
-	public void init() {
-		//Magazine mag = new Magazine();
-		//Tablet tab = new Tablet();
+	public void init() throws IOException {
+		this.tablet = new Tablet();
+		this.mag = new Magazine();
+		
+		String mortarAddr = "192.168.1.1";
+		String tabletAddr = "192.168.0.1";
+		
+		this.mortarListener = new WelcomeSocket();
+		this.mortarListener.init(mortarAddr, 4445);
+		
+		this.tabletListener = new WelcomeSocket();
+		this.tabletListener.init(tabletAddr, 4444);
+		
 	}
 	
 	public void fire(){
@@ -40,4 +56,6 @@ class Controller{
 			}
 		}
 	}
+	
+	
 }
