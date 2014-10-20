@@ -1,0 +1,58 @@
+package magServer;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+
+import org.junit.Test;
+
+public class TestMagazine {
+
+	Magazine magazine = new Magazine(20);
+	
+	@Test
+	public void testFire() {}
+	
+	@Test
+	public void testRotate1() { // test rotate 1 tube
+		
+		ArrayList<Tube> expectedTubes = magazine.getTubes();
+		Tube firstTube = expectedTubes.get(0); 
+		expectedTubes.remove(0);
+		expectedTubes.add(firstTube);
+		
+		// actual result
+		magazine.rotate();
+		
+		// compare expected and actual results
+		assertEquals(magazine.getTubes(), expectedTubes);
+		
+	}
+	
+	@Test
+	public void testRotate7() { // test rotate 7 tubes
+		
+		ArrayList<Tube> expectedTubes = magazine.getTubes();
+		for (int i = 0; i < 7; i++) {
+			Tube firstTube = expectedTubes.get(0); 
+			expectedTubes.remove(0);
+			expectedTubes.add(firstTube);
+		}
+		
+		// actual result
+		magazine.rotate(7);
+		
+		// compare expected and actual results
+		assertEquals(magazine.getTubes(), expectedTubes);
+		
+	}
+	@Test
+	public void testUnmatch() {
+		Magazine testMag = new Magazine(50);
+		testMag.rotate(27);
+		assertEquals(49, testMag.apply(22).getMortar().getID());
+	}
+	
+	
+
+}
