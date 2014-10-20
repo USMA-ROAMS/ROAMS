@@ -13,7 +13,7 @@ public class Mortar {
 	private String elev = "00000";
 	private String message = "iam "+ ID + "," + fuze + "," + gps + "," + elev;
 	private boolean stillThere;
-	private MortarSocket mortarListener;
+	//private MortarSocket mortarListener;
     
 	// When instantiating a mortar, an ID is needed
 	public Mortar(int newID) { ID = newID; }
@@ -31,7 +31,7 @@ public class Mortar {
 	public void setElev(String newElev) { this.elev = newElev; }
 	public String getElev() { return this.elev; }
 	
-	public void sendSelf(String message) { this.mortarListener.sendToSocket(message); }
+	//public void sendSelf(String message) { this.mortarListener.sendToSocket(message); }
 	
 	// if encountering id < 10, add a "0" in the message
 	public String makeMessage() {
@@ -55,16 +55,16 @@ public class Mortar {
 	};
     
 	public void receiveIAm(String newMessage){	//update self based on message
-		updateSelf(Integer.parseInt(newMessage.substring(2,3)),newMessage.substring(4,18),Integer.parseInt(newMessage.substring(0,1)),newMessage.substring(19,23));
-		Controller.updateTablet();
+		//updateSelf(Integer.parseInt(newMessage.substring(2,3)),newMessage.substring(4,18),Integer.parseInt(newMessage.substring(0,1)),newMessage.substring(19,23));
+		//Controller.updateTablet();
 	}
 	
 	public void startSocketListener(){
-		this.mortarListener = new MortarSocket();
-		mortarListener.start();
+		//this.mortarListener = new MortarSocket();
+		//mortarListener.start();
 	}
 }
-
+/*
 class MortarSocket implements Runnable {
   private String clHost ="192.168.1.1";
   int clPort = 4445;
@@ -85,6 +85,7 @@ class MortarSocket implements Runnable {
     super.receiveData(message);
   }
 }
+*/
 
 /*
 class MortarPing implements Runnable{
