@@ -6,19 +6,17 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 
 public class Mortar {
-	//need function for after the mortar leaves
-	private int fuze = 0;
-	private int ID; 
-	private String gps = "AA000000000000";
-	private String elev = "00000";
-	private String message = "iam "+ ID + "," + fuze + "," + gps + "," + elev;
-	private boolean stillThere;
-	//private MortarSocket mortarListener;
+
+	private int fuze = 0;						// Fuze type: NEED TO BE INCLUDED
+	private int ID;								// ID Form: 2 digits
+	private String gps = "AA000000000000";		// GPS Form: 2 letters and 12 digits
+	private String elev = "00000";				// Elevation Form: 5 digits
+	private boolean stillThere;					// Whether the mortar is fired or not
     
 	// When instantiating a mortar, an ID is needed
 	public Mortar(int newID) { ID = newID; }
 	
-	// All the setters and getters	
+	// All the setters and getters of fuze, ID, GPS, elevation
 	public void setID(int newID) { this.ID = newID; }
 	public int getID() { return this.ID; }
 	
@@ -40,8 +38,9 @@ public class Mortar {
 		else tempStr += this.ID;
 		return "iam "+ tempStr + ","+ fuze + "," + gps + "," + elev;
 	}
-  
-	public void updateSelf(int newID, int newFuze, String newGps, String newElev) {		//takes info from controller, changes data on mortar
+	
+	// Takes info from controller, changes data on mortar
+	public void updateSelf(int newID, int newFuze, String newGps, String newElev) {		
 		this.setID(newID);
 		this.setFuze(newFuze);
 		this.setGps(newGps);
