@@ -1,6 +1,11 @@
 package magServer;
 
-class Tube{
-	int magPos= function(){super.tubes.indexOf(this)};
-	Mortar mortar = new Mortar(magPos);
-	};
+public class Tube {
+	private int magPos;
+	public Mortar mortar;
+	
+	public Tube(int magPos) { mortar = new Mortar(magPos); }
+	
+	public void setMagPos(int newPos) { this.magPos = newPos; }
+	public int getMagPos() { return this.magPos; }
+}
