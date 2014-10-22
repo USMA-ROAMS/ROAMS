@@ -17,10 +17,12 @@ public class Mortar {
 	public Mortar(int newID) { ID = newID; }
 	
 	// All the setters and getters of fuze, ID, GPS, elevation
-	public void setID(int newID) { this.ID = newID; }
+	public void setID(int newID) { if (newID >= 0) this.ID = newID;
+									else this.ID = -1;}
 	public int getID() { return this.ID; }
 	
-	public void setFuze(int newFuze) { this.fuze = newFuze; }
+	public void setFuze(int newFuze) { if (newFuze < 5) this.fuze = newFuze;
+										else this.fuze = -1;}
 	public int getFuze() { return this.fuze; }
 	
 	public void setGps(String newGps) { this.gps = newGps; }
@@ -29,10 +31,16 @@ public class Mortar {
 	public void setElev(String newElev) { this.elev = newElev; }
 	public String getElev() { return this.elev; }
 	
+	public void setHere(boolean here) { this.stillThere = here; }
+	public boolean getHere() { return this.stillThere; }
+	
+	
 	//public void sendSelf(String message) { this.mortarListener.sendToSocket(message); }
 	
 	// if encountering id < 10, add a "0" in the message
 	public String makeMessage() {
+		if (fuze == -1){ return "Failure";}
+		else if (ID == -1){ return "Failure";};
 		String tempStr = "";
 		if (this.ID < 10) { tempStr += "0" + this.ID; }
 		else tempStr += this.ID;
@@ -49,7 +57,7 @@ public class Mortar {
 	
 	public void receiveData(String message){
 		if (message.substring(0,2) == "iam") { receiveIAm(message); }
-		else if (message.substring(1,6)==" here"){ this.stillThere = true; };
+		else{ this.setHere(true); };
 		//send message back to mortar that is ID+" acknowledge"
 	};
     
