@@ -7,7 +7,8 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.concurrent.locks.ReentrantLock;
 
-class ChildSocket extends Mortar implements Runnable {
+class ChildSocket implements Runnable {
+	Mortar 								mortar;
 	Socket 								dSock;
 	OutputStreamWriter 					os;
 	BufferedReader 						is;
@@ -17,31 +18,58 @@ class ChildSocket extends Mortar implements Runnable {
 	  this.dSock = newSock;
 	  create();
   }
-  
+	
+	public void setMortar(Mortar newMortar){
+		this.mortar = newMortar;
+	}
+	
 	public void create() throws Exception {
 	  this.os = new OutputStreamWriter(dSock.getOutputStream(), "UTF-8"); //For sending:: Use .write to send data over os
 	  this.is = new BufferedReader(new InputStreamReader(dSock.getInputStream())); //For receiving::
   }
   
-  public void sendToSocket(String message){
-	  try {
-    os.write(message);
-	  }
-	  catch (IOException e) {System.out.println("error");}
-  }
+	public void sendToSocket(String message){
+		try {
+			os.write(message);
+		}
+		catch (IOException e) {System.out.println("error");}
+	}
   
   public void run(){
-    String message = "";
-    String read;
-
-    try {
-		while((read = is.readLine()) != null);
-		message = message + read;
+	while(true){		
+	    String read = "";
+	    try {
+			//while((read = is.readLine()) != null){
+	    		read = is.readLine();
+			    if(read.equals("closeme")){
+			    	System.out.println("Client closed connection");
+			    	break;
+			    }
+			    else if(read == ""){
+			    	System.out.println("Empty String??");
+			    }
+			    else if(read == null){}
+			    else{
+				    System.out.println("Received Message!");
+				    System.out.println("Updating Mortar " + this.mortar.strID);
+				    mortar.receiveData(read);
+			    }
+			//}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Failed to read.");
+			e.printStackTrace();
+		}
+	 }
+	
+	try {
+		this.dSock.close();
+		Thread.currentThread().interrupt();
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-    super.receiveData(message);
+	
   }
 }
 

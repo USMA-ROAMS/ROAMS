@@ -1,9 +1,10 @@
 package magServer;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 public class Roams {
-
+	
 	public static void main(String[] args) throws IOException {
 		System.out.println("Making Controller");
 		Controller controller = new Controller();
@@ -11,5 +12,14 @@ public class Roams {
 		System.out.println("Initializing Controller");
 		controller.init();
 		System.out.println("Controller Initialized");
+		
+		
+		System.out.println("Enter 0 to close Server...");
+		Scanner reader = new Scanner(System.in);
+		int comm = reader.nextInt();
+		if(comm == 0){
+			reader.close();
+			controller.closeGracefully();
+		}
 	}
 }

@@ -7,14 +7,16 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.concurrent.locks.ReentrantLock;
 
-class TabletChildSocket extends Tablet implements Runnable {
+class TabletChildSocket implements Runnable {
 	  Socket 							dSock;
 	  OutputStreamWriter 				os;
 	  BufferedReader 					is;
 	  private final ReentrantLock		lock = new ReentrantLock();
+	  private Tablet					tablet;
   
-  public void acceptSocket(Socket newSock) throws Exception {
+  public void acceptSocket(Socket newSock, Tablet newTablet) throws Exception {
 	  this.dSock = newSock;
+	  this.tablet = newTablet;
 	  create();
   }
   
@@ -30,17 +32,50 @@ class TabletChildSocket extends Tablet implements Runnable {
   }
   
   public void run(){
-    String message = "";
-    String read;
-
-    try {
-		while((read = is.readLine()) != null);
-		message = message + read;
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+		while(true){
+			System.out.println("Mortar here!");
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+		    String read = "";
+		    try {
+				//while((read = is.readLine()) != null){
+		    		read = is.readLine();
+					System.out.println(read);
+				    if(read.equals("closeme")){
+				    	System.out.println("Tablet closed connection");
+				    	break;
+				    }
+				    else if(read == ""){
+				    	System.out.println("Empty String??");
+				    }
+				    else if(read == null){}
+				    else{
+					    System.out.println("Received Message!");
+					    System.out.println("Updating Tablet ");
+					    tablet.receiveData(read);
+				    }
+				//}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println("Failed to read.");
+				e.printStackTrace();
+			}
+		 }
+		
+		try {
+			this.dSock.close();
+			Thread.currentThread().interrupt();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	  }
 	}
-    super.receiveData(message);
-  }
-}
+
 

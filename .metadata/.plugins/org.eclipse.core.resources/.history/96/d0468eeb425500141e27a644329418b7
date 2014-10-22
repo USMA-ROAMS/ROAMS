@@ -1,9 +1,0 @@
-package magServer;
-
-public class welcomeSocket {
-	private String 			host;
-	private int 			port; 
-	public void init(String host, int port){
-		
-	}
-}
