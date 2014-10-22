@@ -10,8 +10,20 @@ public class TestMagazine {
 
 	Magazine magazine = new Magazine(20);
 	
+	
+	public void testFire() {} //TODO
+	
 	@Test
-	public void testFire() {}
+	public void testTubes() {
+		
+		
+		
+		
+	}
+	
+	
+	
+	
 	
 	@Test
 	public void testRotate1() { // test rotate 1 tube
@@ -28,6 +40,8 @@ public class TestMagazine {
 		assertEquals(magazine.getTubes(), expectedTubes);
 		
 	}
+	
+	
 	
 	@Test
 	public void testRotate7() { // test rotate 7 tubes

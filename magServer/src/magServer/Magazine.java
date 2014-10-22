@@ -30,7 +30,7 @@ public class Magazine {
 		}
 	}
 	
-	public void fire() {
+	public void fire() { //TODO
 		this.rotate();
 	}
 	
