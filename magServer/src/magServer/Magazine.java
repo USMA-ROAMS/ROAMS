@@ -1,16 +1,27 @@
 package magServer;
 
 import java.util.*;
+import java.util.concurrent.locks.ReentrantLock;
 
-public class Magazine {
-	int capacity;
-	ArrayList<Tube> tubes = new ArrayList<Tube>();
+class Magazine{
+	public int 							capacity;
+	public ArrayList<Tube> 				tubes = new ArrayList<Tube>();
+	private final ReentrantLock			lock = new ReentrantLock();
 	
-	public Magazine(int newCap) {
-		this.capacity = newCap;
-		for (int i = 0; i < this.capacity; i++) {
-			this.tubes.add(new Tube(i));
+	public void init(int cap){
+		this.capacity = cap;
+		for (int i = 0; i<capacity; i++){
+			tubes.add(new Tube());
+			System.out.println(Integer.toString(i+1) + " tubes initialized");
 		}
+	}
+	
+	public int getCapacity(){
+		return this.capacity;
+	}
+	
+	public Tube getLastTube(){
+		return this.tubes.get(capacity - 1);
 	}
 	
 	public ArrayList<Tube> getTubes() { return this.tubes; }

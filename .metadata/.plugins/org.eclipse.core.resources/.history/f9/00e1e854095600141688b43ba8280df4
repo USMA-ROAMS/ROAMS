@@ -1,0 +1,10 @@
+package magServer;
+
+import java.util.concurrent.locks.ReentrantLock;
+
+class Tube extends Magazine {
+	public ReentrantLock	lock = new ReentrantLock();
+	
+	int magPos = super.tubes.indexOf(this);
+	Mortar mortar = new Mortar();
+	}

@@ -1,0 +1,65 @@
+package magServer;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class TabletWecomeSocket extends WelcomeSocket implements Runnable {
+	Controller 							cont;
+	String 								host;
+	int 								port;
+	ServerSocketChannel 				sock;
+	InetSocketAddress 					addr;
+	private final ReentrantLock			lock = new ReentrantLock();
+	private boolean 					stop;
+
+	public void init(String newHost, int newPort, Controller newCont) throws IOException {
+		this.cont = newCont;
+		this.host = newHost;
+		this.port = newPort;
+		this.addr = new InetSocketAddress(host, port);
+		this.sock = ServerSocketChannel.open();
+		this.sock.configureBlocking(false);
+		this.sock.bind(addr);
+	}
+
+	public void initializeTablet (Socket clientSocket) throws Exception{
+		System.out.println("Making Mortar");
+		Mortar newMortar = new Mortar();
+		System.out.println("Initializing Mortar");
+		newMortar.init(this.cont, clientSocket, cont.nextID);
+		System.out.println("Adding Mortar to last tube");
+		cont.getMag().getLastTube().acceptMortar(newMortar);
+		cont.getMag().getLastTube().mortar.mortarListener.setMortar(newMortar);
+		System.out.println("Starting Mortar's thread");
+		//cont.startThread(cont.getMag().getLastTube().mortar);
+		new Thread(cont.getMag().getLastTube().mortar.getMortarListener()).start();
+		System.out.println("Rotating Magazine once");
+		cont.rotateMagazine(1);
+	}
+	
+	public void run() {
+		try {
+			System.out.println("Listening for connections...");
+			while (!stop){
+				SocketChannel clientSocketChannel = this.sock.accept();
+				if(clientSocketChannel != null){
+					Socket clientSocket = clientSocketChannel.socket();
+				
+					System.out.println("Mortar Connecting... Initializing it.");
+					initializeMortar(clientSocket);
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+}

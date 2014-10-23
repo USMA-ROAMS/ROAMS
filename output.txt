@@ -1,0 +1,59 @@
+Making Controller
+Controller made
+Initializing Controller
+Initializing Tablet Object
+Tablet Objected Initialized
+Initializing Magazine Object
+1 tubes initialized
+2 tubes initialized
+3 tubes initialized
+4 tubes initialized
+5 tubes initialized
+6 tubes initialized
+7 tubes initialized
+8 tubes initialized
+9 tubes initialized
+10 tubes initialized
+11 tubes initialized
+12 tubes initialized
+13 tubes initialized
+14 tubes initialized
+15 tubes initialized
+16 tubes initialized
+17 tubes initialized
+18 tubes initialized
+19 tubes initialized
+20 tubes initialized
+Magazine Object Initialized
+Attempting to bind welcome socket to 127.0.0.1 on port 4445
+Bound successfully!
+Controller Initialized
+Listening for connections...
+Mortar Connecting... Initializing it.
+Making Mortar
+Initializing Mortar
+Adding Mortar to last tube
+Starting Mortar's thread
+Rotating Magazine once
+I'M HERE! HUZZAH!
+Mortar here!
+iam 0,0,AA000000000000,00000
+Received Message!
+Sending to Mortar 00
+iam 0,0,AA000000000000,00000
+Mortar here!
+closeme
+Received Message!
+Sending to Mortar 00
+closeme
+Mortar here!
+null
+Mortar here!
+null
+Mortar here!
+null
+Mortar here!
+null
+Mortar here!
+null
+Mortar here!

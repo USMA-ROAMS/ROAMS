@@ -1,18 +1,21 @@
 package magServer;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.nio.channels.SocketChannel;
+import java.util.concurrent.locks.ReentrantLock;
 
-public class Mortar {
+class Mortar { //need function for after the mortar leaves
+	int 								fuze = 0;
+	int 								ID;
+	String 								strID;
+	String 								gps = "AA000000000000";
+	String 								elev = "00000";
+	String 								message = ("iam "+ Integer.toString(ID) +","+ Integer.toString(fuze) + "," + gps + "," + elev);
+	boolean 							stillThere;
+	ChildSocket 						mortarListener = new ChildSocket();
+	private final ReentrantLock			lock = new ReentrantLock();
+	Controller 							cont;
 
-	private int fuze = 0;						// Fuze type: NEED TO BE INCLUDED
-	private int ID;								// ID Form: 2 digits
-	private String gps = "AA000000000000";		// GPS Form: 2 letters and 12 digits
-	private String elev = "00000";				// Elevation Form: 5 digits
-	private boolean stillThere;					// Whether the mortar is fired or not
-    
 	// When instantiating a mortar, an ID is needed
 	public Mortar(int newID) { ID = newID; }
 	
@@ -37,6 +40,30 @@ public class Mortar {
 		if (this.ID < 10) { tempStr += "0" + this.ID; }
 		else tempStr += this.ID;
 		return "iam "+ tempStr + ","+ fuze + "," + gps + "," + elev;
+  }  
+  
+	public void init(Controller newCont, Socket clientSocket, String ID) throws Exception {
+		mortarListener.setMortar(this);
+		mortarListener.acceptSocket(clientSocket);
+		this.cont = newCont;
+		this.strID = ID;
+		this.cont.incrementID();
+	}
+	
+	public ChildSocket getMortarListener(){
+		return this.mortarListener;
+	}
+	
+	public void setFuze(int ID){
+		this.fuze = ID;
+	}
+	
+	public void setController(Controller newCont){
+		this.cont = newCont;
+	}
+	
+	public void sendSelf(String message){
+		this.mortarListener.sendToSocket(message);
 	}
 	
 	// Takes info from controller, changes data on mortar
@@ -46,50 +73,26 @@ public class Mortar {
 		this.setGps(newGps);
 		this.setElev(newElev);
 	}
+
+	public void updateSelf(int newFuze, String newGps, int newID, String newElev){		//takes info from controller, changes data on mortar
+		fuze = newFuze;
+		ID = newID; 
+		gps = newGps;
+		elev = newElev;
+		}
 	
 	public void receiveData(String message){
-		if (message.substring(0,2) == "iam") { receiveIAm(message); }
-		else if (message.substring(1,6)==" here"){ this.stillThere = true; };
-		//send message back to mortar that is ID+" acknowledge"
-	};
+		System.out.println(message);
+		if (message.substring(0,2) == "iam"){
+			receiveIAm(message);
+			}
+		else if (message.substring(1,6)==" here"){
+			this.stillThere = true; //send message back to mortar that is ID+" acknowledge"
+		 	};
+		};
     
 	public void receiveIAm(String newMessage){	//update self based on message
-		//updateSelf(Integer.parseInt(newMessage.substring(2,3)),newMessage.substring(4,18),Integer.parseInt(newMessage.substring(0,1)),newMessage.substring(19,23));
-		//Controller.updateTablet();
-	}
-	
-	public void startSocketListener(){
-		//this.mortarListener = new MortarSocket();
-		//mortarListener.start();
+		updateSelf(Integer.parseInt(newMessage.substring(2,3)),newMessage.substring(4,18),Integer.parseInt(newMessage.substring(0,1)),newMessage.substring(19,23));
+		cont.updateTablet();
 	}
 }
-/*
-class MortarSocket implements Runnable {
-  private String clHost ="192.168.1.1";
-  int clPort = 4445;
-  private Socket dSock = new Socket(clHost, clPort);
-  OutputStreamWriter os = new OutputStreamWriter(dSock.getOutputStream(), "UTF-8"); //For sending:: Use .write to send data over os
-  BufferedReader is = new BufferedReader(new InputStreamReader(dSock.getInputStream())); //For receiving::
-
-  public void sendToSocket(String message){
-    os.write(message);
-  }
-  
-  public void run(){
-    private String message = "";
-    private String read
-    while((str = is.readLine()) != null); {
-      message = message + read;
-    }
-    super.receiveData(message);
-  }
-}
-*/
-
-/*
-class MortarPing implements Runnable{
-  pingHost = "192.168.1.1";
-  int pingPort = 4446;
-  pingSock = new Socket(pingHost, pingPort);
-}
-*/
