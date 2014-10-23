@@ -4,25 +4,19 @@ import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 class Magazine{
-	public int 							capacity;
-	public ArrayList<Tube> 				tubes = new ArrayList<Tube>();
-	private final ReentrantLock			lock = new ReentrantLock();
+	public int 					capacity;
+	public ArrayList<Tube> 		tubes = new ArrayList<Tube>();
+	private final ReentrantLock	lock = new ReentrantLock();
 	
-	public void init(int cap){
+	public void init(int cap) {
 		this.capacity = cap;
-		for (int i = 0; i<capacity; i++){
-			tubes.add(new Tube());
+		for (int i = 0; i < capacity; i++){
+			tubes.add(new Tube(i));
 			System.out.println(Integer.toString(i+1) + " tubes initialized");
 		}
 	}
 	
-	public int getCapacity(){
-		return this.capacity;
-	}
-	
-	public Tube getLastTube(){
-		return this.tubes.get(capacity - 1);
-	}
+	public Tube getLastTube() { return this.tubes.get(capacity - 1); }
 	
 	public ArrayList<Tube> getTubes() { return this.tubes; }
 	public void setCapacity(int cap) { this.capacity = cap; }
@@ -33,12 +27,6 @@ class Magazine{
 		Tube tempTube = this.tubes.get(0);
 		tubes.remove(tempTube);
 		tubes.add(this.capacity - 1, tempTube);		
-	}
-	
-	public void rotate(int spaces) {
-		for (int i = 0; i < spaces; i++) {
-			this.rotate();
-		}
 	}
 	
 	public void fire() { //TODO

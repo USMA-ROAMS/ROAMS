@@ -149,14 +149,14 @@ class Controller {
 	}
 	
 	public void startThread(Mortar mortarToStart){
-		String threadName = "mortarThread" + mortarToStart.strID;
+		String threadName = "mortarThread" + mortarToStart.ID;
 		new Thread(mortarToStart.mortarListener, threadName).start();
 	}
 	
-	public void updateMortar(int ID, int fuze, String gps, String elev){  //takes message from Tablet to mortar, then updates actual mortar
+	public void updateMortar(String ID, String fuze, String gps, String elev){  //takes message from Tablet to mortar, then updates actual mortar
 		for (int i=0;i<mag.capacity;i++){
-			if (mag.tubes.get(i).mortar.ID==ID){
-				mag.tubes.get(i).mortar.updateSelf(fuze, gps, ID, elev);
+			if (mag.tubes.get(i).mortar.ID == ID) {
+				mag.tubes.get(i).mortar.updateSelf(ID, fuze, gps, elev);
 				mag.tubes.get(i).mortar.sendSelf(mag.tubes.get(i).mortar.message);
 			}
 		}

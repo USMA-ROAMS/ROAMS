@@ -51,7 +51,7 @@ class ChildSocket implements Runnable {
 			    else if(read == null){}
 			    else{
 				    System.out.println("Received Message!");
-				    System.out.println("Updating Mortar " + this.mortar.strID);
+				    System.out.println("Updating Mortar " + this.mortar.ID);
 				    mortar.receiveData(read);
 			    }
 			//}

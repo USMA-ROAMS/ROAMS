@@ -8,7 +8,8 @@ import org.junit.Test;
 
 public class TestMagazine {
 
-	Magazine magazine = new Magazine(20);
+	Magazine magazine = new Magazine();
+	
 	
 	
 	public void testFire() {} //TODO
@@ -27,6 +28,8 @@ public class TestMagazine {
 	
 	@Test
 	public void testRotate1() { // test rotate 1 tube
+		
+		magazine.init(20);
 		
 		ArrayList<Tube> expectedTubes = magazine.getTubes();
 		Tube firstTube = expectedTubes.get(0); 
@@ -62,7 +65,7 @@ public class TestMagazine {
 	}
 	@Test
 	public void testUnmatch() {
-		Magazine testMag = new Magazine(50);
+		Magazine testMag = new Magazine();
 		testMag.rotate(27);
 		assertEquals(49, testMag.apply(22).getMortar().getID());
 	}

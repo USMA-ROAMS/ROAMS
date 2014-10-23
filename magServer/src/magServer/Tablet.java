@@ -22,8 +22,8 @@ class Tablet extends Controller{
 	}
 	
 	public void receiveData(String message){ //gets data from actual tablet, sends up to controller to update mortar object
-		int ID = Integer.parseInt(message.substring(0,1));
-		int fuze = Integer.parseInt(message.substring(2));
+		String ID = message.substring(0,1);
+		String fuze = message.substring(2);
 		String gps = message.substring(3,16);
 		String elev = message.substring(17,21);
 		super.updateMortar(ID, fuze, gps, elev);

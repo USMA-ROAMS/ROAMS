@@ -29,7 +29,7 @@ public class WelcomeSocket implements Runnable {
 
 	public void initializeMortar(Socket clientSocket) throws Exception{
 		System.out.println("Making Mortar");
-		Mortar newMortar = new Mortar();
+		Mortar newMortar = new Mortar(cont.nextID);
 		System.out.println("Initializing Mortar");
 		newMortar.init(this.cont, clientSocket, cont.nextID);
 		System.out.println("Adding Mortar to last tube");
