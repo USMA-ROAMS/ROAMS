@@ -42,6 +42,14 @@ public class TestMagazine {
 		// compare expected and actual results
 		assertEquals(expectedTubes, magazine.getTubes());
 	}
+
+	@Test
+	public void rotateTest() { //mortars change position in magazine on rotate 
+		magazine.rotate();
+		assertEquals(magazine.apply(0).getMortar().getID(),1);
+		assertEquals(magazine.apply(19).getMortar().getID(),0);
+	}
+
 	
 	@Test
 	public void testRotate7() { // test rotate 7 tubes
