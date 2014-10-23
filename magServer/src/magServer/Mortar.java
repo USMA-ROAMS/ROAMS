@@ -17,15 +17,26 @@ public class Mortar {
 	public Mortar(int newID) { ID = newID; }
 	
 	// All the setters and getters of fuze, ID, GPS, elevation
-	public void setID(int newID) { if (newID >= 0) this.ID = newID;
-									else this.ID = -1;}
+	public void setID(int newID) { try{if (newID >= 0) this.ID = newID;
+										else {throw new  IllegalArgumentException("Can't be less than 0");};
+	}
+										catch(IllegalArgumentException x){
+											this.ID = -1;}
+	}
 	public int getID() { return this.ID; }
 	
-	public void setFuze(int newFuze) { if (newFuze < 5) this.fuze = newFuze;
-										else this.fuze = -1;}
+	public void setFuze(int newFuze) { try {if(newFuze >5) {throw new IllegalArgumentException("No such fuze");}
+										else this.fuze = newFuze;
+	}
+										catch(IllegalArgumentException x){this.fuze = -1;}
+	}
 	public int getFuze() { return this.fuze; }
 	
-	public void setGps(String newGps) { this.gps = newGps; }
+	public void setGps(String newGps) { try {if(newGps.length() != 14) {throw new IllegalArgumentException("Not the correct format");}
+										else {this.gps = newGps;}
+	}		
+								catch(IllegalArgumentException x){ this.gps = this.gps;}
+	}
 	public String getGps() { return this.gps; }
 	
 	public void setElev(String newElev) { this.elev = newElev; }
@@ -71,6 +82,8 @@ public class Mortar {
 		//mortarListener.start();
 	}
 }
+
+
 /*
 class MortarSocket implements Runnable {
   private String clHost ="192.168.1.1";

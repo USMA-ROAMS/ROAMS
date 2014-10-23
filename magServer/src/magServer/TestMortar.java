@@ -1,6 +1,8 @@
 package magServer;
 
 import static org.junit.Assert.*;
+import java.io.BufferedReader;
+
 import org.junit.Test;
 
 public class TestMortar {
@@ -27,10 +29,10 @@ public class TestMortar {
 		mortar.setID(0);
 		assertEquals(0, mortar.getID());
 	}
-	@Test
+	@Test 
 	public void idTestFail(){
 		mortar.setID(-40);
-		assertEquals(-1, mortar.getID());
+		assertEquals(mortar.getID(), -1);
 	}
 	
 	@Test	// Check if fuze setting method is functional
@@ -40,7 +42,7 @@ public class TestMortar {
 	}
 	@Test
 	public void fuzeTestBorder() {
-		mortar.setFuze(5);
+		mortar.setFuze(6);
 		assertEquals(mortar.getFuze(), -1);
 	}
 	@Test 
@@ -53,6 +55,11 @@ public class TestMortar {
 	public void gpsTest() {
 		mortar.setGps("WL123412341234");
 		assertEquals(mortar.getGps(), "WL123412341234");
+	}
+	@Test
+	public void gpsFail(){
+		mortar.setGps("Hello!");
+		assertEquals(mortar.getGps(), "AA000000000000");
 	}
 	
 	@Test	// Check if elevation setting method is functional

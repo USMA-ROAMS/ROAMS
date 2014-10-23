@@ -40,8 +40,12 @@ public class TestMagazine {
 		assertEquals(magazine.getTubes(), expectedTubes);
 		
 	}
-	
-	
+	@Test
+	public void rotateTest() { //mortars change position in magazine on rotate 
+		magazine.rotate();
+		assertEquals(magazine.apply(0).getMortar().getID(),1);
+		assertEquals(magazine.apply(19).getMortar().getID(),0);
+	}
 	
 	@Test
 	public void testRotate7() { // test rotate 7 tubes
