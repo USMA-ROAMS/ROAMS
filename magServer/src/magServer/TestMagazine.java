@@ -8,27 +8,27 @@ import org.junit.Test;
 
 public class TestMagazine {
 
-	Magazine magazine = new Magazine();
-	
-	
-	
 	public void testFire() {} //TODO
 	
 	@Test
 	public void testTubes() {
+		Magazine magazine = new Magazine();
+		magazine.init(20);
 		
-		
-		
-		
+		assertEquals(20, magazine.tubes.size());
 	}
 	
-	
-	
-	
+	@Test
+	public void testEmptyTube() {
+		Magazine magazine = new Magazine();
+		magazine.init(20);
+		
+		assertEquals(null, magazine.apply(7).getMortar());
+	}
 	
 	@Test
 	public void testRotate1() { // test rotate 1 tube
-		
+		Magazine magazine = new Magazine();
 		magazine.init(20);
 		
 		ArrayList<Tube> expectedTubes = magazine.getTubes();
@@ -40,14 +40,13 @@ public class TestMagazine {
 		magazine.rotate();
 		
 		// compare expected and actual results
-		assertEquals(magazine.getTubes(), expectedTubes);
-		
+		assertEquals(expectedTubes, magazine.getTubes());
 	}
-	
-	
 	
 	@Test
 	public void testRotate7() { // test rotate 7 tubes
+		Magazine magazine = new Magazine();
+		magazine.init(20);
 		
 		ArrayList<Tube> expectedTubes = magazine.getTubes();
 		for (int i = 0; i < 7; i++) {
@@ -57,19 +56,9 @@ public class TestMagazine {
 		}
 		
 		// actual result
-		magazine.rotate(7);
+		for (int i = 0; i < 7; i++) { magazine.rotate(); }
 		
 		// compare expected and actual results
-		assertEquals(magazine.getTubes(), expectedTubes);
-		
+		assertEquals(expectedTubes, magazine.getTubes());
 	}
-	@Test
-	public void testUnmatch() {
-		Magazine testMag = new Magazine();
-		testMag.rotate(27);
-		assertEquals(49, testMag.apply(22).getMortar().getID());
-	}
-	
-	
-
 }
