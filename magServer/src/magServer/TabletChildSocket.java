@@ -33,7 +33,7 @@ class TabletChildSocket implements Runnable {
   
   public void run(){
 		while(true){
-			System.out.println("Mortar here!");
+			System.out.println("Tablet here!");
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e1) {

@@ -7,24 +7,17 @@ class Tablet:
     tablets = []
     
     def main(self):
-        
-        print "Making a new Drone"
-        t = threading.Thread(target = self.tab)
-        self.tablets.append(t)
-        print "Starting drone"
-        t.start()
-
-    def tab(self):
-        self.mess = "<line>01,0,AA000000000000,00000</line>"
+        self.mess = "01,0,AA000000000000,00000\n"
         sock = socket(AF_INET, SOCK_STREAM)
         sock.connect(('127.0.0.1',4446))
 
         reader = readerThread(sock)
         reader.start()
         
-        
-        sock.send(self.mess)
-        time.sleep(1)
+        while(1):
+            sock.send(self.mess)
+            time.sleep(1)
+            print "data sent!"
         
         sock.send("closeme\n")
         sock.close()        
@@ -40,6 +33,7 @@ class readerThread(threading.Thread):
             elif data == "killthread":
                 self.clntsock.send("closeme\n")
             print "\n" + str(data)
+            
 if __name__ == "__main__":
     tablet = Tablet()
     tablet.main()

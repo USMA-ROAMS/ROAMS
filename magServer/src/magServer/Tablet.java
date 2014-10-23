@@ -3,7 +3,7 @@ package magServer;
 import java.net.Socket;
 import java.util.concurrent.locks.ReentrantLock;
 
-class Tablet extends Controller{
+class Tablet {
 	
 	int 							state = 0;
 	TabletChildSocket				tabletListener;
@@ -26,7 +26,8 @@ class Tablet extends Controller{
 		String fuze = message.substring(2);
 		String gps = message.substring(3,16);
 		String elev = message.substring(17,21);
-		super.updateMortar(ID, fuze, gps, elev);
+		
+		//cont.updateMortar(ID, fuze, gps, elev);
 	}
 }
 	

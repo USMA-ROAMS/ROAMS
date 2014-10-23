@@ -18,22 +18,30 @@ class Mortar { //need function for after the mortar leaves
 	// When instantiating a mortar, an ID is needed
 	public Mortar(String newID) { ID = newID; }
 	
+	public void init(Controller newCont, Socket clientSocket, String ID) throws Exception {
+		mortarListener.setMortar(this);
+		mortarListener.acceptSocket(clientSocket);
+		this.cont = newCont;
+		this.ID = ID;
+		this.cont.incrementID();
+	}
+	
 	// All the setters and getters of fuze, ID, GPS, elevation
 
-	public void setID(int newID) { try{if (newID >= 0) this.ID = newID;
+	public void setID(String newID) { try{if (Integer.parseInt(newID) >= 0) this.ID = newID;
 										else {throw new  IllegalArgumentException("Can't be less than 0");};
 	}
 										catch(IllegalArgumentException x){
-											this.ID = -1;}
+											this.ID = "-1";}
 	}
-	public int getID() { return this.ID; }
+	public String getID() { return this.ID; }
 	
-	public void setFuze(int newFuze) { try {if(newFuze >5) {throw new IllegalArgumentException("No such fuze");}
+	public void setFuze(String newFuze) { try {if(Integer.parseInt(newFuze)>5) {throw new IllegalArgumentException("No such fuze");}
 										else this.fuze = newFuze;
 	}
-										catch(IllegalArgumentException x){this.fuze = -1;}
+										catch(IllegalArgumentException x){this.fuze = "-1";}
 	}
-	public int getFuze() { return this.fuze; }
+	public String getFuze() { return this.fuze; }
 
 	
 	public void setGps(String newGps) { try {if(newGps.length() != 14) {throw new IllegalArgumentException("Not the correct format");}
@@ -51,15 +59,6 @@ class Mortar { //need function for after the mortar leaves
   
 	public void setHere(boolean here) { this.stillThere = here; }
 	public boolean getHere() { return this.stillThere; }
-  
-	public void init(Controller newCont, Socket clientSocket, String ID) throws Exception {
-		mortarListener.setMortar(this);
-		mortarListener.acceptSocket(clientSocket);
-		this.cont = newCont;
-		this.ID = ID;
-		this.cont.incrementID();
-
-	}
 	
 	public ChildSocket getMortarListener() { return this.mortarListener; }
 	
@@ -84,14 +83,8 @@ class Mortar { //need function for after the mortar leaves
 		//send message back to mortar that is ID+" acknowledge"
 	};
     
-	public void receiveIAm(String newMessage){	//update self based on message
-		//updateSelf(Integer.parseInt(newMessage.substring(2,3)),newMessage.substring(4,18),Integer.parseInt(newMessage.substring(0,1)),newMessage.substring(19,23));
-		//Controller.updateTablet();
-
-	}
-    
 	public void receiveIAm(String newMessage){	// update self based on message
 		updateSelf(newMessage.substring(0,1), newMessage.substring(2,3), newMessage.substring(4,18), newMessage.substring(19,23));
-		cont.updateTablet();
+		cont.updateTablet(newMessage);
 	}
 }

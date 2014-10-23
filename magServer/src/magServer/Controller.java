@@ -12,7 +12,7 @@ class Controller {
 	private final ReentrantLock		lock = new ReentrantLock();
 	public String					nextID = "00";
 	String 							mortarAddr = "127.0.0.1";
-	String 							tabletAddr = "192.168.0.1";
+	String 							tabletAddr = "127.0.0.1";
 	
 	//Initialize all elements required for controller operation
 	public void init() throws IOException {
@@ -58,29 +58,31 @@ class Controller {
 			//TODO Implement code to kill the server neatly if the attempted bind fails 3 times
 		}
 		
-//		while (timeoutCounter < 3){
-//			try {
-//				System.out.println("Attempting to bind welcome socket to " + tabletAddr + " on port " + "4444");
-//				this.tabletListener = new WelcomeSocket();
-//				this.tabletListener.init(tabletAddr, 4444);
-//				System.out.println("Bound successfully!");
-//				break;
-//			} catch (java.net.BindException e) {
-//				timeoutCounter ++;
-//				System.out.println("Couldn't bind to " + tabletAddr);
-//				System.out.println("Failed " + Integer.toString(timeoutCounter) + " times.");
-//				try {
-//					Thread.sleep(3000);
-//				} catch (InterruptedException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
-//			}
-//		}
-//		
-//		if (timeoutCounter >= 3) {
-//			//TODO Implement code to kill the server neatly if the attempted bind times out 3 times
-//		}
+		while (timeoutCounter < 3){
+			try {
+				System.out.println("Attempting to bind welcome socket to " + tabletAddr + " on port " + "4444");
+				this.tabletListener = new TabletWelcomeSocket();
+				this.tabletListener.init(tabletAddr, 4446, this);
+				System.out.println("Bound successfully!");
+				Thread tabletWelcome = new Thread(this.tabletListener, "TabletWelcomeSocket");
+				tabletWelcome.start();
+				break;
+			} catch (java.net.BindException e) {
+				timeoutCounter ++;
+				System.out.println("Couldn't bind to " + tabletAddr);
+				System.out.println("Failed " + Integer.toString(timeoutCounter) + " times.");
+				try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		}
+		
+		if (timeoutCounter >= 3) {
+			//TODO Implement code to kill the server neatly if the attempted bind times out 3 times
+		}
 		
 	}
 	
@@ -103,14 +105,11 @@ class Controller {
 		rotateMagazine(1);
 		}
 	
-	public void updateTablet(){ //sends data from magazine to tablet to send
+	public void updateTablet(String newMessage){ //sends data from magazine to tablet to send
 		//TODO Following line needs implementation
-		//tablet.send(String "<list>");
-		for(Tube tube : this.mag.tubes){
-			tablet.send(tube.mortar.makeMessage());
-			tablet.send("</list>\n");
-		}
+		tablet.send(newMessage);
 	}
+	
 	
 	public void closeGracefully(){
 		//TODO Implement code that will kill all of the open connections and running threads gracefully
