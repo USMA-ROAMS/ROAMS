@@ -7,7 +7,25 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 public class TestMagazine {
+	public Mortar makeMortar(String str){
+		Mortar mortar = new Mortar(str);
+		try {
+			mortar.init(null, null, str);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return mortar;}
+	public Magazine makeMagazine(){
+		Magazine magazine = new Magazine();
+		magazine.init(20);
+		for (int i = 0; i<magazine.capacity;i++){
+			if (i <10){magazine.tubes.get(i).acceptMortar(makeMortar("0"+Integer.toString(i)));}
+			else {magazine.tubes.get(i).acceptMortar(makeMortar(Integer.toString(i)));}}
+		return magazine;}
 
+	Magazine magazine = makeMagazine();
+	
 	public void testFire() {} //TODO
 	
 	@Test
@@ -46,8 +64,8 @@ public class TestMagazine {
 	@Test
 	public void rotateTest() { //mortars change position in magazine on rotate 
 		magazine.rotate();
-		assertEquals(magazine.apply(0).getMortar().getID(),1);
-		assertEquals(magazine.apply(19).getMortar().getID(),0);
+		assertEquals(magazine.apply(0).getMortar().getID(),"01");
+		assertEquals(magazine.apply(19).getMortar().getID(),"00");
 	}
 
 	

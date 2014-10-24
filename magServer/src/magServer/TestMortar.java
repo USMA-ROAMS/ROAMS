@@ -1,54 +1,63 @@
 package magServer;
 
 import static org.junit.Assert.*;
+
 import java.io.BufferedReader;
 
 import org.junit.Test;
 
 public class TestMortar {
 	// Test the mortar that has an ID of 7
-	Mortar mortar = new Mortar(7);
-	
+	public Mortar makeMortar(){
+		Mortar mortar = new Mortar("07");
+		try {
+			mortar.init(null, null, "07");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return mortar;}
+	Mortar mortar = makeMortar();
 	// Check if default settings are correct
 	// Also, check if the getter functions are working
 	@Test
 	public void defaultTest() {
-		assertEquals(mortar.getID(), 7);
-		assertEquals(mortar.getFuze(), 0);
+		assertEquals(mortar.getID(), "07");
+		assertEquals(mortar.getFuze(), "0");
 		assertEquals(mortar.getGps(), "AA000000000000");
 		assertEquals(mortar.getElev(), "00000");
 	}
 	
 	@Test	// Check if ID setting method is functional
 	public void idTest() {
-		mortar.setID(19);
-		assertEquals(19, mortar.getID());
+		mortar.setID("19");
+		assertEquals("19", mortar.getID());
 	}
 	@Test
 	public void idTestBorder(){
-		mortar.setID(0);
-		assertEquals(0, mortar.getID());
+		mortar.setID("0");
+		assertEquals("0", mortar.getID());
 	}
 	@Test 
 	public void idTestFail(){
-		mortar.setID(-40);
-		assertEquals(mortar.getID(), -1);
+		mortar.setID("-40");
+		assertEquals(mortar.getID(), "-1");
 	}
 	
 	@Test	// Check if fuze setting method is functional
 	public void fuzeTest() {
-		mortar.setFuze(2);
-		assertEquals(mortar.getFuze(), 2);
+		mortar.setFuze("2");
+		assertEquals(mortar.getFuze(), "2");
 	}
 	@Test
 	public void fuzeTestBorder() {
-		mortar.setFuze(6);
-		assertEquals(mortar.getFuze(), -1);
+		mortar.setFuze("6");
+		assertEquals(mortar.getFuze(), "-1");
 	}
 	@Test 
 	public void fuzeTestFail(){
-		mortar.setFuze(18);
-		assertEquals(mortar.getFuze(),-1);
+		mortar.setFuze("18");
+		assertEquals(mortar.getFuze(),"-1");
 	}
 	
 	@Test	// Check if GPS setting method is functional
@@ -77,13 +86,13 @@ public class TestMortar {
 	// Also, check if returned message is correct
 	@Test
 	public void msgTest() {
-		mortar.updateSelf(2, 1, "DC567856785678", "98765");
+		mortar.updateSelf("02", "1", "DC567856785678", "98765");
 		assertEquals(mortar.makeMessage(),
 					 "iam 02,1,DC567856785678,98765");
 	}
 	@Test
 	public void msgTestFail() {
-		mortar.updateSelf(2, 15, "DC567856785678", "98765");
+		mortar.updateSelf("02", "15", "DC567856785678", "98765");
 		assertEquals(mortar.makeMessage(),
 					 "Failure");
 	}

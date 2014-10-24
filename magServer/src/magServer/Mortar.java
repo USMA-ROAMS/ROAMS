@@ -18,9 +18,14 @@ class Mortar { //need function for after the mortar leaves
 	// When instantiating a mortar, an ID is needed
 	public Mortar(String newID) { ID = newID; }
 	
-	public void init(Controller newCont, Socket clientSocket, String ID) throws Exception {
+	public void init(Controller newCont, Socket clientSocket, String ID){
 		mortarListener.setMortar(this);
-		mortarListener.acceptSocket(clientSocket);
+		try {
+			mortarListener.acceptSocket(clientSocket);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.cont = newCont;
 		this.ID = ID;
 		this.cont.incrementID();
@@ -55,7 +60,10 @@ class Mortar { //need function for after the mortar leaves
 
 	public String getElev() { return this.elev; }	
 	
-	public String makeMessage() { return "iam "+ ID + ","+ fuze + "," + gps + "," + elev; }  
+	public String makeMessage() {if (ID == "-1"){ return "Failure";}
+							else if(fuze == "-1"){ return "Failure";}
+							else{ return "iam "+ ID + ","+ fuze + "," + gps + "," + elev; }  
+	}
   
 	public void setHere(boolean here) { this.stillThere = here; }
 	public boolean getHere() { return this.stillThere; }
