@@ -5,13 +5,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.util.concurrent.locks.ReentrantLock;
+//import java.util.concurrent.locks.ReentrantLock;
 
 class TabletChildSocket implements Runnable {
 	  Socket 							dSock;
 	  OutputStreamWriter 				os;
 	  BufferedReader 					is;
-	  private final ReentrantLock		lock = new ReentrantLock();
+	  //private final ReentrantLock		lock = new ReentrantLock();
 	  private Tablet					tablet;
   
   public void acceptSocket(Socket newSock, Tablet newTablet) throws Exception {
@@ -27,7 +27,7 @@ class TabletChildSocket implements Runnable {
   
   public void sendToSocket(String message){
 	  try {
-		  os.write(message);
+		  os.write(message + '\n');
 	  } catch (IOException e) {System.out.println("error");}
   }
   
@@ -53,7 +53,7 @@ class TabletChildSocket implements Runnable {
 				    else if(read == ""){
 				    	System.out.println("Empty String??");
 				    }
-				    else if(read == null){}
+				    //else if(read == null){}
 				    else{
 					    System.out.println("Received Message!");
 					    System.out.println("Updating Tablet ");

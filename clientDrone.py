@@ -15,7 +15,7 @@ class DroneSwarm:
             t.start()
 
     def droneClient(self):
-        self.mess = "iam 0,0,AA000000000000,00000/n"
+        self.mess = "iam 0,0,AA000000000000,00000\n"
         sock = socket(AF_INET, SOCK_STREAM)
         sock.connect(('127.0.0.1',4445))
 

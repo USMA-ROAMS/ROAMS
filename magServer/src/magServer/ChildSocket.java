@@ -5,14 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.util.concurrent.locks.ReentrantLock;
+//import java.util.concurrent.locks.ReentrantLock;
 
 class ChildSocket implements Runnable {
 	Mortar 								mortar;
 	Socket 								dSock;
 	OutputStreamWriter 					os;
 	BufferedReader 						is;
-	private final ReentrantLock			lock = new ReentrantLock();
+	//private final ReentrantLock			lock = new ReentrantLock();
   
 	public void acceptSocket(Socket newSock) throws Exception {
 	  this.dSock = newSock;
@@ -48,7 +48,7 @@ class ChildSocket implements Runnable {
 			    else if(read == ""){
 			    	System.out.println("Empty String??");
 			    }
-			    else if(read == null){}
+			    //else if(read == null){}
 			    else{
 				    System.out.println("Received Message!");
 				    System.out.println("Updating Mortar " + this.mortar.ID);

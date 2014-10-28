@@ -1,8 +1,8 @@
 package magServer;
 
 import java.net.Socket;
-import java.nio.channels.SocketChannel;
-import java.util.concurrent.locks.ReentrantLock;
+//import java.nio.channels.SocketChannel;
+//import java.util.concurrent.locks.ReentrantLock;
 
 class Mortar { //need function for after the mortar leaves
 	String								fuze = "0";
@@ -12,7 +12,7 @@ class Mortar { //need function for after the mortar leaves
 	String 								message = "iam "+ ID +","+ fuze + "," + gps + "," + elev;
 	boolean 							stillThere;
 	ChildSocket 						mortarListener = new ChildSocket();
-	private final ReentrantLock			lock = new ReentrantLock();
+	//private final ReentrantLock			lock = new ReentrantLock();
 	Controller 							cont;
 
 	// When instantiating a mortar, an ID is needed
@@ -33,39 +33,45 @@ class Mortar { //need function for after the mortar leaves
 	
 	// All the setters and getters of fuze, ID, GPS, elevation
 
-	public void setID(String newID) { try{if (Integer.parseInt(newID) >= 0) this.ID = newID;
-										else {throw new  IllegalArgumentException("Can't be less than 0");};
+	public void setID(String newID) { 
+		try{
+			if (Integer.parseInt(newID) >= 0) this.ID = newID;
+			else {throw new  IllegalArgumentException("Can't be less than 0");};
+		} catch(IllegalArgumentException x) { this.ID = "-1";}
 	}
-										catch(IllegalArgumentException x){
-											this.ID = "-1";}
-	}
+	
 	public String getID() { return this.ID; }
 	
-	public void setFuze(String newFuze) { try {if(Integer.parseInt(newFuze)>5) {throw new IllegalArgumentException("No such fuze");}
-										else this.fuze = newFuze;
+	public void setFuze(String newFuze) { 
+		try {
+			if(Integer.parseInt(newFuze)>5) {throw new IllegalArgumentException("No such fuze");}
+			else this.fuze = newFuze;
+		} catch(IllegalArgumentException x){this.fuze = "-1";}
 	}
-										catch(IllegalArgumentException x){this.fuze = "-1";}
-	}
-	public String getFuze() { return this.fuze; }
 
-	
-	public void setGps(String newGps) { try {if(newGps.length() != 14) {throw new IllegalArgumentException("Not the correct format");}
-										else {this.gps = newGps;}
-	}		
-								catch(IllegalArgumentException x){ this.gps = this.gps;}
+	public void setGps(String newGps) { 
+		try {
+			if(newGps.length() != 14) {throw new IllegalArgumentException("Not the correct format");}
+			else {this.gps = newGps;}
+		} catch(IllegalArgumentException x){/*this.gps = this.gps;*/}
 	}
+	
 	public String getGps() { return this.gps; }
 	
 	public void setElev(String newElev) { this.elev = newElev; }
 
-	public String getElev() { return this.elev; }	
+	public String getElev() { return this.elev; }
 	
-	public String makeMessage() {if (ID == "-1"){ return "Failure";}
-							else if(fuze == "-1"){ return "Failure";}
-							else{ return "iam "+ ID + ","+ fuze + "," + gps + "," + elev; }  
+	public String getFuze() { return this.fuze; }
+	
+	public String makeMessage() {
+		if (ID == "-1"){ return "Failure";}
+		else if(fuze == "-1"){ return "Failure";}
+		else{ return "iam "+ ID + ","+ fuze + "," + gps + "," + elev; }  
 	}
   
 	public void setHere(boolean here) { this.stillThere = here; }
+	
 	public boolean getHere() { return this.stillThere; }
 	
 	public ChildSocket getMortarListener() { return this.mortarListener; }
@@ -87,7 +93,7 @@ class Mortar { //need function for after the mortar leaves
 		System.out.println(message);
 		if (message.substring(0,2) == "iam") { receiveIAm(message); }
 
-		else{ this.setHere(true); };
+		else{ this.setHere(true); }
 		//send message back to mortar that is ID+" acknowledge"
 	};
     

@@ -5,7 +5,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.concurrent.locks.ReentrantLock;
+//import java.util.concurrent.locks.ReentrantLock;
 
 public class TabletWelcomeSocket implements Runnable {
 	Controller 							cont;
@@ -13,7 +13,7 @@ public class TabletWelcomeSocket implements Runnable {
 	int 								port;
 	ServerSocketChannel 				sock;
 	InetSocketAddress 					addr;
-	private final ReentrantLock			lock = new ReentrantLock();
+	//private final ReentrantLock			lock = new ReentrantLock();
 	private boolean 					stop;
 
 	public void init(String newHost, int newPort, Controller newCont) throws IOException {

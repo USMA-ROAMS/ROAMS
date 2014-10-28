@@ -1,13 +1,13 @@
 package magServer;
 
 import java.net.Socket;
-import java.util.concurrent.locks.ReentrantLock;
+//import java.util.concurrent.locks.ReentrantLock;
 
 class Tablet {
 	
 	int 							state = 0;
 	TabletChildSocket				tabletListener;
-	private final ReentrantLock		lock = new ReentrantLock();
+	//private final ReentrantLock		lock = new ReentrantLock();
 	private Controller 				cont;
 	
 	public void init(Controller newCont, Socket tabletSocket) throws Exception{
@@ -27,7 +27,7 @@ class Tablet {
 		String gps = message.substring(3,16);
 		String elev = message.substring(17,21);
 		
-		//cont.updateMortar(ID, fuze, gps, elev);
+		cont.updateMortar(ID, fuze, gps, elev);
 	}
 }
 	

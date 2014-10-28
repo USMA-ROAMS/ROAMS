@@ -1,7 +1,7 @@
 package magServer;
 
 import java.io.IOException;
-import java.util.concurrent.locks.ReentrantLock;
+//import java.util.concurrent.locks.ReentrantLock;
 
 class Controller {
 	Tablet 							tablet; 
@@ -9,7 +9,7 @@ class Controller {
 	WelcomeSocket 					mortarListener;
 	TabletWelcomeSocket 			tabletListener;
 	public int 						ThreadCount;
-	private final ReentrantLock		lock = new ReentrantLock();
+	//private final ReentrantLock		lock = new ReentrantLock();
 	public String					nextID = "00";
 	String 							mortarAddr = "127.0.0.1";
 	String 							tabletAddr = "127.0.0.1";

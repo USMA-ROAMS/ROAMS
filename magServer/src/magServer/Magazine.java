@@ -1,12 +1,12 @@
 package magServer;
 
 import java.util.*;
-import java.util.concurrent.locks.ReentrantLock;
+//import java.util.concurrent.locks.ReentrantLock;
 
 class Magazine{
 	public int 					capacity;
 	public ArrayList<Tube> 		tubes = new ArrayList<Tube>();
-	private final ReentrantLock	lock = new ReentrantLock();
+	//private final ReentrantLock	lock = new ReentrantLock();
 	
 	public void init(int cap) {
 		this.capacity = cap;

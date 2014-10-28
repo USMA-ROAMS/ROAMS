@@ -2,7 +2,7 @@ package magServer;
 
 import static org.junit.Assert.*;
 
-import java.io.BufferedReader;
+//import java.io.BufferedReader;
 
 import org.junit.Test;
 
