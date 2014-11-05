@@ -1,7 +1,6 @@
 package magServer;
 
 import java.net.Socket;
-//import java.nio.channels.SocketChannel;
 //import java.util.concurrent.locks.ReentrantLock;
 
 class Mortar { //need function for after the mortar leaves
@@ -91,9 +90,15 @@ class Mortar { //need function for after the mortar leaves
 	//send message back to mortar that is ID +" acknowledge"
 	public void receiveData(String message) {
 		System.out.println(message);
-		if (message.substring(0,2) == "iam") { receiveIAm(message); }
+		if (message.substring(0,2) == "iam") { 
+			receiveIAm(message);
+			this.mortarListener.sendToSocket("ack");
+		}
 
-		else{ this.setHere(true); }
+		else{ 
+			this.setHere(true);
+			this.mortarListener.sendToSocket("ack"+ID);
+		}
 		//send message back to mortar that is ID+" acknowledge"
 	};
     

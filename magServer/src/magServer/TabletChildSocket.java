@@ -4,12 +4,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.Socket;
 //import java.util.concurrent.locks.ReentrantLock;
 
 class TabletChildSocket implements Runnable {
 	  Socket 							dSock;
-	  OutputStreamWriter 				os;
+	  PrintWriter						os;
 	  BufferedReader 					is;
 	  //private final ReentrantLock		lock = new ReentrantLock();
 	  private Tablet					tablet;
@@ -20,18 +21,15 @@ class TabletChildSocket implements Runnable {
 	  create();
   }
   
-  public void create() throws Exception {
-	  this.os = new OutputStreamWriter(dSock.getOutputStream(), "UTF-8"); //For sending:: Use .write to send data over os
-	  this.is = new BufferedReader(new InputStreamReader(dSock.getInputStream())); //For receiving::
-  }
+	public void create() throws Exception {
+		  //this.os = new OutputStreamWriter(dSock.getOutputStream(), "UTF-8"); //For sending:: Use .write to send data over os
+			this.os = new PrintWriter(dSock.getOutputStream(), true);
+			this.is = new BufferedReader(new InputStreamReader(dSock.getInputStream())); //For receiving::
+	  }
+	  
+	public void sendToSocket(String message){os.println(message);}	
   
-  public void sendToSocket(String message){
-	  try {
-		  os.write(message + '\n');
-	  } catch (IOException e) {System.out.println("error");}
-  }
-  
-  public void run(){
+	public void run(){
 		while(true){
 			System.out.println("Tablet here!");
 			try {

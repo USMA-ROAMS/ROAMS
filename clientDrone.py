@@ -22,9 +22,10 @@ class DroneSwarm:
         reader = readerThread(sock)
         reader.start()
         
+        sock.send(self.mess)
         while 1:
-            sock.send(self.mess)
-            time.sleep(1)
+          sock.send('00' + 'here,' + '0' + ',' + 'AA000000000000' +',' + '00000\n')
+          time.sleep(1)
         
         sock.send("closeme\n")
         sock.close()        
@@ -39,7 +40,7 @@ class readerThread(threading.Thread):
             if not data: break
             elif data == "killthread":
                 self.clntsock.send("closeme\n")
-            print "\n" + str(data)
+            print "\n" + data.decode('utf-8')
 if __name__ == "__main__":
     swarm = DroneSwarm()
     swarm.main()
