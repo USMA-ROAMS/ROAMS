@@ -22,12 +22,14 @@ class Tablet {
 	}
 	
 	public void receiveData(String message){ //gets data from actual tablet, sends up to controller to update mortar object
-		String ID = message.substring(0,1);
-		String fuze = message.substring(2);
-		String gps = message.substring(3,16);
-		String elev = message.substring(17,21);
-		
-		cont.updateMortar(ID, fuze, gps, elev);
+		if(message.substring(0,1).equals(1)){
+			String ID = message.substring(1,3);
+			String fuze = message.substring(3,4);
+			String gps = message.substring(4,18);
+			String elev = message.substring(18,23);
+			cont.updateMortar(ID, fuze, gps, elev);
+		}
+		else System.out.println("Don't know what to do with this message");
 	}
 }
 	

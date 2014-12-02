@@ -8,9 +8,10 @@ class Mortar { //need function for after the mortar leaves
 	String 								ID;
 	String 								gps = "AA000000000000";
 	String 								elev = "00000";
-	String 								message = "iam "+ ID +","+ fuze + "," + gps + "," + elev;
+	String 								message = ID + fuze + gps + elev;
 	boolean 							stillThere;
 	ChildSocket 						mortarListener = new ChildSocket();
+	int									ackCount = 0;
 	//private final ReentrantLock			lock = new ReentrantLock();
 	Controller 							cont;
 
@@ -66,7 +67,7 @@ class Mortar { //need function for after the mortar leaves
 	public String makeMessage() {
 		if (ID == "-1"){ return "Failure";}
 		else if(fuze == "-1"){ return "Failure";}
-		else{ return "iam "+ ID + ","+ fuze + "," + gps + "," + elev; }  
+		else{ return ID + fuze + gps + elev; }  
 	}
   
 	public void setHere(boolean here) { this.stillThere = here; }
@@ -90,20 +91,19 @@ class Mortar { //need function for after the mortar leaves
 	//send message back to mortar that is ID +" acknowledge"
 	public void receiveData(String message) {
 		System.out.println(message);
-		if (message.substring(0,2) == "iam") { 
+		if (message.substring(0,1).equals("1")) { 
 			receiveIAm(message);
-			this.mortarListener.sendToSocket("ack");
 		}
-
-		else{ 
-			this.setHere(true);
-			this.mortarListener.sendToSocket("ack"+ID);
-		}
-		//send message back to mortar that is ID+" acknowledge"
-	};
+		else if (message.substring(0,1).equals("!")) { 
+			System.out.println("Mortar " + message.substring(1, 2) + " ack'd");
+			ackCount = 0;
+		} 
+		else{System.out.println("Don't know what to do with this message.");}
+	}
     
 	public void receiveIAm(String newMessage){	// update self based on message
-		updateSelf(newMessage.substring(0,1), newMessage.substring(2,3), newMessage.substring(4,18), newMessage.substring(19,23));
-		cont.updateTablet(newMessage);
+		updateSelf(newMessage.substring(1,3), newMessage.substring(3,4), newMessage.substring(4,18), newMessage.substring(18,23));
+		//TODO Implement this when new tablet interface completed.
+		//cont.updateTablet(newMessage);
 	}
 }

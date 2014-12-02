@@ -3,7 +3,7 @@ import threading
 import time
 
 class DroneSwarm:
-    numDrones = 20
+    numDrones = 1
     drones = []
     
     def main(self):
@@ -15,7 +15,7 @@ class DroneSwarm:
             t.start()
 
     def droneClient(self):
-        self.mess = "iam 0,0,AA000000000000,00000\n"
+        self.mess = "1001AA00000000000000000\n"
         sock = socket(AF_INET, SOCK_STREAM)
         sock.connect(('127.0.0.1',4445))
 
@@ -24,7 +24,7 @@ class DroneSwarm:
         
         sock.send(self.mess)
         while 1:
-          sock.send('00' + 'here,' + '0' + ',' + 'AA000000000000' +',' + '00000\n')
+          sock.send("!01")
           time.sleep(1)
         
         sock.send("closeme\n")

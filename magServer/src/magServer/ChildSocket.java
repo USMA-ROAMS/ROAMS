@@ -3,7 +3,6 @@ package magServer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 //import java.util.concurrent.locks.ReentrantLock;
@@ -11,7 +10,6 @@ import java.net.Socket;
 class ChildSocket implements Runnable {
 	Mortar 								mortar;
 	Socket 								dSock;
-	//OutputStreamWriter 					os;
 	PrintWriter							os;
 	BufferedReader 						is;
 	//private final ReentrantLock			lock = new ReentrantLock();
@@ -36,10 +34,11 @@ class ChildSocket implements Runnable {
 	}
   
   public void run(){
+	System.out.println("Sending Mortar " + this.mortar.ID + " it's Identity");
+	sendToSocket("0" + this.mortar.ID + System.getProperty("line.separator")); //Send just initialized mortar it's ID
 	while(true){		
 	    String read = "";
 	    try {
-			//while((read = is.readLine()) != null){
 	    		read = is.readLine();
 			    if(read.equals("closeme")){
 			    	System.out.println("Client closed connection");
@@ -48,15 +47,12 @@ class ChildSocket implements Runnable {
 			    else if(read == ""){
 			    	System.out.println("Empty String??");
 			    }
-			    //else if(read == null){}
 			    else{
 				    System.out.println("Received Message!");
 				    System.out.println("Updating Mortar " + this.mortar.ID);
 				    mortar.receiveData(read);
 			    }
-			//}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			System.out.println("Failed to read.");
 			e.printStackTrace();
 		}

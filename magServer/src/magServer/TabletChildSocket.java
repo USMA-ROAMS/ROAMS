@@ -3,7 +3,6 @@ package magServer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 //import java.util.concurrent.locks.ReentrantLock;
@@ -22,7 +21,6 @@ class TabletChildSocket implements Runnable {
   }
   
 	public void create() throws Exception {
-		  //this.os = new OutputStreamWriter(dSock.getOutputStream(), "UTF-8"); //For sending:: Use .write to send data over os
 			this.os = new PrintWriter(dSock.getOutputStream(), true);
 			this.is = new BufferedReader(new InputStreamReader(dSock.getInputStream())); //For receiving::
 	  }
@@ -41,7 +39,6 @@ class TabletChildSocket implements Runnable {
 			
 		    String read = "";
 		    try {
-				//while((read = is.readLine()) != null){
 		    		read = is.readLine();
 					System.out.println(read);
 				    if(read.equals("closeme")){
@@ -51,7 +48,6 @@ class TabletChildSocket implements Runnable {
 				    else if(read == ""){
 				    	System.out.println("Empty String??");
 				    }
-				    //else if(read == null){}
 				    else{
 					    System.out.println("Received Message!");
 					    System.out.println("Updating Tablet ");

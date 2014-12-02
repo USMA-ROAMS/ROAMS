@@ -153,6 +153,7 @@ class Controller {
 	}
 	
 	public void updateMortar(String ID, String fuze, String gps, String elev){  //takes message from Tablet to mortar, then updates actual mortar
+		//TODO This updates all mortars with one set of info; Incorrect, needs to change.
 		for (int i=0;i<mag.capacity;i++){
 			if (mag.tubes.get(i).mortar.ID == ID) {
 				mag.tubes.get(i).mortar.updateSelf(ID, fuze, gps, elev);
