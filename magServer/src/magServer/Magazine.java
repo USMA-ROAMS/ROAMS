@@ -28,10 +28,4 @@ class Magazine{
 		tubes.remove(tempTube);
 		tubes.add(this.capacity - 1, tempTube);		
 	}
-	
-	public void fire() { //TODO
-		this.rotate();
-	}
-	
-
 }
