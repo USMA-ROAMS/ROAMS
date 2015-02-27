@@ -11,8 +11,8 @@ class Controller {
 	public int 						ThreadCount;
 	//private final ReentrantLock		lock = new ReentrantLock();
 	public String					nextID = "00";
-	String 							mortarAddr = "127.0.0.1";
-	String 							tabletAddr = "127.0.0.1";
+	String 							mortarAddr = "192.168.42.1";
+	String 							tabletAddr = "192.168.42.1";
 	
 	//Initialize all elements required for controller operation
 	public void init() throws IOException {
@@ -20,7 +20,7 @@ class Controller {
 		//Instantiate and initialize new Magazine object
 		System.out.println("Initializing Magazine Object");
 		this.mag = new Magazine();
-		mag.init(20); //Integer passed as parameter here dictates magazine size.
+		mag.init(5); //Integer passed as parameter here dictates magazine size.
 		System.out.println("Magazine Object Initialized");
 		
 		//Begin process to create welcome socket and bind it to desired host and port
@@ -62,7 +62,7 @@ class Controller {
 			try {
 				System.out.println("Attempting to bind welcome socket to " + tabletAddr + " on port " + "4444");
 				this.tabletListener = new TabletWelcomeSocket();
-				this.tabletListener.init(tabletAddr, 4446, this);
+				this.tabletListener.init(tabletAddr, 4444, this);
 				System.out.println("Bound successfully!");
 				Thread tabletWelcome = new Thread(this.tabletListener, "TabletWelcomeSocket");
 				tabletWelcome.start();
@@ -86,14 +86,23 @@ class Controller {
 		
 	}
 	
-	public void rotateMagazine(int num){
-		for(int i = 0;i<num;i++){
-			mag.rotate();
-		}
+	public void rotateMagazine(String rotMessage){
+		int dist = Integer.parseInt(rotMessage.substring(2,3));
+		int dir = Integer.parseInt(rotMessage.substring(1,2));
 		
-//		for(Tube tube : this.mag.tubes){
-//			tablet.send(tube.mortar.makeMessage());
-//		}
+		if (dir == 0){
+			for(int i = 0;i<dist;i++){
+				mag.CCWRotate();
+			}
+		}
+		else if (dir == 1){
+			for(int i = 0;i<dist;i++){
+				mag.CWRotate();
+			}
+		}
+		else {
+			System.out.println("Invalid Rotation Direction!");
+		}
 	}
 	
 	public Magazine getMag(){
@@ -102,7 +111,7 @@ class Controller {
 	
 	public void fire(){
 		//sends fire signal
-		rotateMagazine(1);
+		rotateMagazine("301");
 		}
 	
 	public void updateTablet(String newMessage){ //sends data from magazine to tablet to send

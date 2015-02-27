@@ -55,7 +55,7 @@ public class TestMagazine {
 		expectedTubes.add(firstTube);
 		
 		// actual result
-		magazine.rotate();
+		//magazine.rotate();
 		
 		// compare expected and actual results
 		assertEquals(expectedTubes, magazine.getTubes());
@@ -63,7 +63,7 @@ public class TestMagazine {
 
 	@Test
 	public void rotateTest() { //mortars change position in magazine on rotate 
-		magazine.rotate();
+		//magazine.rotate();
 		assertEquals(magazine.apply(0).getMortar().getID(),"01");
 		assertEquals(magazine.apply(19).getMortar().getID(),"00");
 	}
@@ -82,7 +82,7 @@ public class TestMagazine {
 		}
 		
 		// actual result
-		for (int i = 0; i < 7; i++) { magazine.rotate(); }
+		//for (int i = 0; i < 7; i++) { magazine.rotate(); }
 		
 		// compare expected and actual results
 		assertEquals(expectedTubes, magazine.getTubes());

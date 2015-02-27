@@ -23,9 +23,15 @@ class Magazine{
 	public int getCapacity() { return this.capacity; }
 	public Tube apply(int num) { return this.tubes.get(num); }
 	
-	public void rotate() {
+	public void CCWRotate() {
 		Tube tempTube = this.tubes.get(0);
 		tubes.remove(tempTube);
 		tubes.add(this.capacity - 1, tempTube);		
+	}
+	
+	public void CWRotate() {
+		Tube tempTube = this.tubes.get(4);
+		tubes.remove(tempTube);
+		tubes.add(0, tempTube);		
 	}
 }

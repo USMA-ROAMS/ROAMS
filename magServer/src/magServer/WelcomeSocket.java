@@ -40,7 +40,7 @@ public class WelcomeSocket implements Runnable {
 		new Thread(cont.getMag().getLastTube().mortar.getMortarListener()).start();
 		this.cont.ThreadCount ++; //TODO Lock this. Shared resource
 		System.out.println("Rotating Magazine once");
-		cont.rotateMagazine(1);
+		cont.rotateMagazine("301");
 	}
 	
 	public void run() {

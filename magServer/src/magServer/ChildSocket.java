@@ -40,7 +40,10 @@ class ChildSocket implements Runnable {
 	    String read = "";
 	    try {
 	    		read = is.readLine();
-			    if(read.equals("closeme")){
+	    		if (read == null){
+	    			
+	    		}
+	    		else if(read.equals("closeme")){
 			    	System.out.println("Client closed connection");
 			    	break;
 			    }

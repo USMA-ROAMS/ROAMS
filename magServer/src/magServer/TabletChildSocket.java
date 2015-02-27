@@ -13,14 +13,14 @@ class TabletChildSocket implements Runnable {
 	  BufferedReader 					is;
 	  //private final ReentrantLock		lock = new ReentrantLock();
 	  private Tablet					tablet;
+
+	  public void acceptSocket(Socket newSock, Tablet newTablet) throws Exception {
+		  this.dSock = newSock;
+		  this.tablet = newTablet;
+		  create();
+	  }
   
-  public void acceptSocket(Socket newSock, Tablet newTablet) throws Exception {
-	  this.dSock = newSock;
-	  this.tablet = newTablet;
-	  create();
-  }
-  
-	public void create() throws Exception {
+	  public void create() throws Exception {
 			this.os = new PrintWriter(dSock.getOutputStream(), true);
 			this.is = new BufferedReader(new InputStreamReader(dSock.getInputStream())); //For receiving::
 	  }
@@ -28,8 +28,9 @@ class TabletChildSocket implements Runnable {
 	public void sendToSocket(String message){os.println(message);}	
   
 	public void run(){
+		String read = "";
 		while(true){
-			System.out.println("Tablet here!");
+			//System.out.println("Tablet here!");
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e1) {
@@ -37,11 +38,13 @@ class TabletChildSocket implements Runnable {
 				e1.printStackTrace();
 			}
 			
-		    String read = "";
 		    try {
 		    		read = is.readLine();
-					System.out.println(read);
-				    if(read.equals("closeme")){
+
+					if(read == null) {
+				    	//System.out.println("Null string.");
+				    }
+					else if(read.equals("closeme")){
 				    	System.out.println("Tablet closed connection");
 				    	break;
 				    }
@@ -50,7 +53,9 @@ class TabletChildSocket implements Runnable {
 				    }
 				    else{
 					    System.out.println("Received Message!");
+					    System.out.println("Message Recieved was '" + read + "'");
 					    System.out.println("Updating Tablet ");
+					    sendToSocket("Got message!");
 					    tablet.receiveData(read);
 				    }
 				//}
