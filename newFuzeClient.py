@@ -28,6 +28,7 @@ class serverCommands(threading.Thread):
 
       while True:
          try:
+            lightOn(15)
             s.connect((host,port))
             print 'command connection established'
             lightOn(14) # Super blinky lights indicate ESTABLISHED CONNECTION
@@ -81,18 +82,18 @@ class serverCommands(threading.Thread):
                else:
                   print 'Unknown fuze setting'
 
-             gpsData = data[4:18]
-             if len(gpsData) == 14:
-                if gpsData != 'AA000000000000':
-                   gps = gpsData
+               gpsData = data[4:18]
+               if len(gpsData) == 14:
+                  if gpsData != 'AA000000000000':
+                     gps = gpsData
 
-             elevData = data[18:23]
-             if len(elevData) == 5:
-                if elevData != '00000':
-                   elev = elevData
-                   #GPIO.output(15, True)
-             else:
-               print 'Unrecognized Message Type'
+               elevData = data[18:23]
+               if len(elevData) == 5:
+                  if elevData != '00000':
+                     elev = elevData
+                     #GPIO.output(15, True)
+               else:
+                  print 'Unrecognized Message Type'
 # class serverPings(threading.Thread):
 
    # def __init__(self):
