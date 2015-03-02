@@ -1,15 +1,11 @@
 from socket import *
 import threading
-#import RPi.GPIO as GPIO
 import time
-global id
-global setting
-setting = 0
-global gps
-gps = 'AA000000000000'
-global elev
-elev = '00000'
+global id, setting, gps, elev
 
+setting = 0
+gps = 'AA000000000000'
+elev = '00000'
 
 class serverCommands(threading.Thread):
 #Class responsible for communicating with the magServer
@@ -21,7 +17,7 @@ class serverCommands(threading.Thread):
 
    def run(self):
       global id, setting, gps, elev
-      host = "127.0.0.1"
+      host = "192.168.42.1"
       port = 4445
       size = 1024
       ephemeris = ''
@@ -34,11 +30,10 @@ class serverCommands(threading.Thread):
          try:
             s.connect((host,port))
             print 'command connection established'
+            lightOn(14) # Super blinky lights indicate ESTABLISHED CONNECTION
             break
          except:
             pass
-      #GPIO.setup(7, GPIO.OUT)
-      #GPIO.output(7, True)
 
       while True:
          data = s.recv(size)
@@ -51,40 +46,40 @@ class serverCommands(threading.Thread):
                #GPIO.setup(15, GPIO.OUT)
                #turn on green light
             elif data[0] == '0':
-              print 'Recieved ID: ' + data[0]
+              print 'Received ID: ' + data[0]
               id = data[1:3]
             elif data[0] == '?':
               if data[1:3] == id:
                 s.send('!' + id)
             elif data[0] == '1':
-             set = data[3]
-             print "Received " + set
-             #GPIO.setup(12, GPIO.OUT)
-             #GPIO.setup(16, GPIO.OUT)
-             #GPIO.setup(18, GPIO.OUT)
-             #GPIO.setup(22, GPIO.OUT)
-             #GPIO.output(12, False)
-             #GPIO.output(16, False)
-             #GPIO.output(18, False)
-             #GPIO.output(22, False)
-             if set == '0':
-                setting = 0
-                print 'impact'
-                #GPIO.output(12, True)
-             elif set == '1':
-                setting = 1
-                print 'delay'
-                #GPIO.output(16, True)
-             elif set == '2':
-                setting = 2
-                print 'near ground'
-                #GPIO.output(18, True)
-             elif set == '3':
-                setting = 3
-                print 'proximity'
-                #GPIO.output(22, True)
-             else:
-                print 'Unknown fuze setting'
+               set = data[3]
+               print "Received " + set
+               #GPIO.setup(12, GPIO.OUT)
+               #GPIO.setup(16, GPIO.OUT)
+               #GPIO.setup(18, GPIO.OUT)
+               #GPIO.setup(22, GPIO.OUT)
+               #GPIO.output(12, False)
+               #GPIO.output(16, False)
+               #GPIO.output(18, False)
+               #GPIO.output(22, False)
+               if set == '0':
+                  setting = 0
+                  print 'impact'
+                  lightOn(48) # Red light indicates IMPACT
+               elif set == '1':
+                  setting = 1
+                  print 'delay'
+                  lightOn(46) # Blue light indicates DELAY
+               elif set == '2':
+                  setting = 2
+                  print 'near ground'
+                  lightOn(45) # Yellow light indicates NEAR GROUND
+               elif set == '3':
+                  setting = 3
+                  print 'proximity'
+                  lightOn(47) # Green light indicates PROXIMITY
+               else:
+                  print 'Unknown fuze setting'
 
              gpsData = data[4:18]
              if len(gpsData) == 14:
@@ -134,7 +129,6 @@ class serverCommands(threading.Thread):
          # else:
            # print data
       
-
 class fuzeClient:
 
    def main(self):
@@ -143,6 +137,18 @@ class fuzeClient:
             commandThread.start()
             #pingThread.start()
 
+# gpio code
+def lightOn(pin):
+   fileName = "/sys/class/gpio/gpio" + str(pin) + "/value"
+   inFile = open(fileName, "w+")
+   inFile.write("1")
+   inFile.close()
+
+def lightOff(pin):
+   fileName = "/sys/class/gpio/gpio" + str(pin) + "/value"
+   inFile = open(fileName, "w+")
+   inFile.write("0")
+   inFile.close()
 
 if __name__=="__main__":
    client = fuzeClient()
