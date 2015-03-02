@@ -65,7 +65,7 @@ class serverCommands(threading.Thread):
                if set == '0':
                   setting = 0
                   print 'impact'
-                  lightOn(48) # Red light indicates IMPACT
+                  lightOn(45) # Red light indicates IMPACT
                elif set == '1':
                   setting = 1
                   print 'delay'
@@ -73,11 +73,11 @@ class serverCommands(threading.Thread):
                elif set == '2':
                   setting = 2
                   print 'near ground'
-                  lightOn(45) # Yellow light indicates NEAR GROUND
+                  lightOn(47) # Yellow light indicates NEAR GROUND
                elif set == '3':
                   setting = 3
                   print 'proximity'
-                  lightOn(47) # Green light indicates PROXIMITY
+                  lightOn(48) # Green light indicates PROXIMITY
                else:
                   print 'Unknown fuze setting'
 
