@@ -37,6 +37,7 @@ class serverCommands(threading.Thread):
             pass
 
       while True:
+         print "I'm listening"
          data = s.recv(size)
          if data:
             if data[0:3] == '111':
@@ -55,14 +56,6 @@ class serverCommands(threading.Thread):
             elif data[0] == '1':
                set = data[3]
                print "Received " + set
-               #GPIO.setup(12, GPIO.OUT)
-               #GPIO.setup(16, GPIO.OUT)
-               #GPIO.setup(18, GPIO.OUT)
-               #GPIO.setup(22, GPIO.OUT)
-               #GPIO.output(12, False)
-               #GPIO.output(16, False)
-               #GPIO.output(18, False)
-               #GPIO.output(22, False)
                if set == '0':
                   setting = 0
                   print 'impact'
