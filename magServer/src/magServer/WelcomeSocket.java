@@ -6,18 +6,20 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+
 //import java.util.concurrent.locks.ReentrantLock;
 
 public class WelcomeSocket implements Runnable {
-	Controller 							cont;
-	String 								host;
-	int 								port;
-	ServerSocketChannel 				sock;
-	InetSocketAddress 					addr;
-	//private final ReentrantLock			lock = new ReentrantLock();
-	private boolean 					stop;
+	Controller cont;
+	String host;
+	int port;
+	ServerSocketChannel sock;
+	InetSocketAddress addr;
+	// private final ReentrantLock lock = new ReentrantLock();
+	private boolean stop;
 
-	public void init(String newHost, int newPort, Controller newCont) throws IOException {
+	public void init(String newHost, int newPort, Controller newCont)
+			throws IOException {
 		this.cont = newCont;
 		this.host = newHost;
 		this.port = newPort;
@@ -27,7 +29,7 @@ public class WelcomeSocket implements Runnable {
 		this.sock.bind(addr);
 	}
 
-	public void initializeMortar(Socket clientSocket) throws Exception{
+	public void initializeMortar(Socket clientSocket) throws Exception {
 		System.out.println("Making Mortar");
 		Mortar newMortar = new Mortar(cont.nextID);
 		System.out.println("Initializing Mortar");
@@ -36,21 +38,22 @@ public class WelcomeSocket implements Runnable {
 		cont.getMag().getLastTube().acceptMortar(newMortar);
 		cont.getMag().getLastTube().mortar.mortarListener.setMortar(newMortar);
 		System.out.println("Starting Mortar's thread");
-		//cont.startThread(cont.getMag().getLastTube().mortar);
-		new Thread(cont.getMag().getLastTube().mortar.getMortarListener()).start();
-		this.cont.ThreadCount ++; //TODO Lock this. Shared resource
+		// cont.startThread(cont.getMag().getLastTube().mortar);
+		new Thread(cont.getMag().getLastTube().mortar.getMortarListener())
+				.start();
+		this.cont.ThreadCount++; // TODO Lock this. Shared resource
 		System.out.println("Rotating Magazine once");
 		cont.rotateMagazine("301");
 	}
-	
+
 	public void run() {
 		try {
 			System.out.println("Listening for connections...");
-			while (!stop){
+			while (!stop) {
 				SocketChannel clientSocketChannel = this.sock.accept();
-				if(clientSocketChannel != null){
+				if (clientSocketChannel != null) {
 					Socket clientSocket = clientSocketChannel.socket();
-				
+
 					System.out.println("Mortar Connecting... Initializing it.");
 					initializeMortar(clientSocket);
 				}
@@ -64,7 +67,7 @@ public class WelcomeSocket implements Runnable {
 		}
 	}
 
-	public void close(){
+	public void close() {
 		try {
 			this.sock.close();
 		} catch (IOException e) {

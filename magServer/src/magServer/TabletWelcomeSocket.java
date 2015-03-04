@@ -5,18 +5,20 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+
 //import java.util.concurrent.locks.ReentrantLock;
 
 public class TabletWelcomeSocket implements Runnable {
-	Controller 							cont;
-	String 								host;
-	int 								port;
-	ServerSocketChannel 				sock;
-	InetSocketAddress 					addr;
-	//private final ReentrantLock			lock = new ReentrantLock();
-	private boolean 					stop;
+	Controller cont;
+	String host;
+	int port;
+	ServerSocketChannel sock;
+	InetSocketAddress addr;
+	// private final ReentrantLock lock = new ReentrantLock();
+	private boolean stop;
 
-	public void init(String newHost, int newPort, Controller newCont) throws IOException {
+	public void init(String newHost, int newPort, Controller newCont)
+			throws IOException {
 		this.cont = newCont;
 		this.host = newHost;
 		this.port = newPort;
@@ -26,25 +28,25 @@ public class TabletWelcomeSocket implements Runnable {
 		this.sock.bind(addr);
 	}
 
-	public void initializeTablet (Socket clientSocket) throws Exception{
+	public void initializeTablet(Socket clientSocket) throws Exception {
 		System.out.println("Making Tablet");
 		Tablet newTablet = new Tablet();
 		System.out.println("Initializing Tablet");
 		newTablet.init(this.cont, clientSocket);
 		System.out.println("Starting Tablet's thread");
 		new Thread(cont.tablet.tabletListener).start();
-		this.cont.ThreadCount ++; //TODO Lock this. Shared resource
+		this.cont.ThreadCount++; // TODO Lock this. Shared resource
 		System.out.println("Tablet Started");
 	}
-	
+
 	public void run() {
 		try {
 			System.out.println("Listening for connections...");
-			while (!stop){
+			while (!stop) {
 				SocketChannel clientSocketChannel = this.sock.accept();
-				if(clientSocketChannel != null){
+				if (clientSocketChannel != null) {
 					Socket clientSocket = clientSocketChannel.socket();
-				
+
 					System.out.println("Tablet Connecting... Initializing it.");
 					initializeTablet(clientSocket);
 				}
