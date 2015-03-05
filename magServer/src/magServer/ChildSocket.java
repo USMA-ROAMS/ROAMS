@@ -50,7 +50,6 @@ class ChildSocket implements Runnable {
 					// This block is a dead end statement to keep the
 					// server from interpreting an empty buffered reader as
 					// constant null messages
-					Thread.sleep(500);
 				} else if (read.equals("closeme")) {
 					System.out.println("Client closed connection");
 					break;
@@ -62,6 +61,7 @@ class ChildSocket implements Runnable {
 					System.out.println("Updating Mortar " + this.mortar.ID);
 					mortar.receiveData(read);
 				}
+				Thread.sleep(10);
 			} catch (IOException | InterruptedException e) {
 				System.out.println("Failed to read.");
 				e.printStackTrace();

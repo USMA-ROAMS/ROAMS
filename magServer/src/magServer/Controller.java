@@ -12,10 +12,10 @@ class Controller {
 	public int ThreadCount;
 	// private final ReentrantLock lock = new ReentrantLock();
 	public String nextID = "00";
-	//String mortarAddr =  "192.168.42.1";
-	//String tabletAddr =  "192.168.42.1";
-	String mortarAddr = "localhost";
-	String tabletAddr = "localhost";
+	String mortarAddr =  "192.168.42.1";
+	String tabletAddr =  "192.168.42.1";
+	//String mortarAddr = "127.0.0.1";
+	//String tabletAddr = "127.0.0.1";
 
 	// Initialize all elements required for controller operation
 	public void init() throws IOException {
@@ -109,12 +109,14 @@ class Controller {
 		int dir = Integer.parseInt(rotMessage.substring(1, 2));
 
 		if (dir == 0) {
-			for (int i = 0; i < dist; i++) {
-				mag.CCWRotate();
-			}
-		} else if (dir == 1) {
+			System.out.println("Rotating Magainze " + Integer.toString(dist) + " tubes Clockwise...");
 			for (int i = 0; i < dist; i++) {
 				mag.CWRotate();
+			}
+		} else if (dir == 1) {
+			System.out.println("Rotating Magainze " + Integer.toString(dist) + " tubes Counter-Clockwise...");
+			for (int i = 0; i < dist; i++) {
+				mag.CCWRotate();
 			}
 		} else {
 			System.out.println("Invalid Rotation Direction!");

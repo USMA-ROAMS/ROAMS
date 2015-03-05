@@ -48,11 +48,12 @@ class TabletChildSocket implements Runnable {
 					System.out.println("Received Message!");
 					System.out.println("Message Recieved was '" + read + "'");
 					System.out.println("Updating Tablet ");
-					sendToSocket("Got message!");
+					sendToSocket("1");
 					tablet.receiveData(read);
 				}
+				Thread.sleep(10);
 				// }
-			} catch (IOException e) {
+			} catch (IOException | InterruptedException e) {
 				// TODO Auto-generated catch block
 				System.out.println("Failed to read.");
 				e.printStackTrace();

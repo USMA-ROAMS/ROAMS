@@ -26,14 +26,14 @@ class Tablet {
 												// sends up to controller to
 												// update mortar object
 		System.out.println(message);
-		if (message.substring(0, 1).equals(1)) {
-			String ID = message.substring(1, 3);
-			String fuze = message.substring(3, 4);
-			String gps = message.substring(4, 18);
-			String elev = message.substring(18, 23);
+		if (message.substring(0, 1).equals("1")) {
+			String ID = message.substring(1, 2);
+			String fuze = message.substring(2, 3);
+			String gps = message.substring(3, 17);
+			String elev = message.substring(17, 21);
 			cont.updateMortar(ID, fuze, gps, elev);
 		}
-		if (message.substring(0, 1).equals(3)) {
+		if (message.substring(0, 1).equals("3")) {
 			cont.rotateMagazine(message);
 		} else
 			System.out.println("Don't know what to do with this message");
