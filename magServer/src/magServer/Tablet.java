@@ -21,6 +21,10 @@ class Tablet {
 	public void send(String message) {
 		this.tabletListener.sendToSocket(message);
 	}
+	
+	public TabletChildSocket getListener() {
+		return this.tabletListener;
+	}
 
 	public void receiveData(String message) { // gets data from actual tablet,
 												// sends up to controller to

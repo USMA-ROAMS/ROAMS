@@ -32,6 +32,7 @@ class TabletChildSocket implements Runnable {
 	}
 
 	public void run() {
+		//sendToSocket("1");
 		String read = "";
 		while (true) {
 			try {
@@ -48,11 +49,10 @@ class TabletChildSocket implements Runnable {
 					System.out.println("Received Message!");
 					System.out.println("Message Recieved was '" + read + "'");
 					System.out.println("Updating Tablet ");
-					sendToSocket("1");
+					
 					tablet.receiveData(read);
 				}
-				Thread.sleep(10);
-				// }
+				Thread.sleep(20);
 			} catch (IOException | InterruptedException e) {
 				// TODO Auto-generated catch block
 				System.out.println("Failed to read.");

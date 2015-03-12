@@ -8,7 +8,7 @@ public class TestTube {
 	public Mortar makeMortar() {
 		Mortar mortar = new Mortar("04");
 		try {
-			mortar.init(null, null, "04");
+			//mortar.init(null, null, "04");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

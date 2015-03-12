@@ -11,7 +11,7 @@ public class TestMortar {
 	public Mortar makeMortar() {
 		Mortar mortar = new Mortar("07");
 		try {
-			mortar.init(null, null, "07");
+			//mortar.init(null, null, "07");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

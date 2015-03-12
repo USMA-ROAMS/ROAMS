@@ -9,6 +9,7 @@ class Mortar { // need function for after the mortar leaves
 	String ID = "00";
 	String gps = "AA000000000000";
 	String elev = "00000";
+	String magPos = "";
 	String message = ID + fuze + gps + elev;
 	boolean stillThere;
 	ChildSocket mortarListener = new ChildSocket();
@@ -21,7 +22,7 @@ class Mortar { // need function for after the mortar leaves
 		ID = newID;
 	}
 
-	public void init(Controller newCont, Socket clientSocket, String ID) {
+	public void init(Controller newCont, Socket clientSocket, String ID, String magPos) {
 		mortarListener.setMortar(this);
 		try {
 			mortarListener.acceptSocket(clientSocket);
@@ -53,6 +54,10 @@ class Mortar { // need function for after the mortar leaves
 		return this.ID;
 	}
 
+	public String getPos() {
+		return this.magPos;
+	}
+	
 	public void setFuze(String newFuze) {
 		try {
 			if (Integer.parseInt(newFuze) > 5) {
@@ -97,7 +102,7 @@ class Mortar { // need function for after the mortar leaves
 		} else if (fuze == "-1") {
 			return "Failure";
 		} else {
-			return ID + fuze + gps + elev + "\r\n";
+			return ID + fuze + gps + elev;
 		}
 	}
 
@@ -119,7 +124,7 @@ class Mortar { // need function for after the mortar leaves
 
 	public void sendSelf(String message) {
 		System.out.println(message);
-	this.mortarListener.sendToSocket(message);
+		this.mortarListener.sendToSocket(message);
 	}
 
 	// Takes info from controller, changes data on mortar

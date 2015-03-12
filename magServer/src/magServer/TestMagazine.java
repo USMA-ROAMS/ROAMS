@@ -10,7 +10,7 @@ public class TestMagazine {
 	public Mortar makeMortar(String str) {
 		Mortar mortar = new Mortar(str);
 		try {
-			mortar.init(null, null, str);
+			//mortar.init(null, null, str);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

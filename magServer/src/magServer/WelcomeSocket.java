@@ -33,7 +33,7 @@ public class WelcomeSocket implements Runnable {
 		System.out.println("Making Mortar");
 		Mortar newMortar = new Mortar(cont.nextID);
 		System.out.println("Initializing Mortar");
-		newMortar.init(this.cont, clientSocket, cont.nextID);
+		newMortar.init(this.cont, clientSocket, cont.nextID, Integer.toString(cont.getMag().getLastTube().getPos()));
 		System.out.println("Adding Mortar to last tube");
 		cont.getMag().getLastTube().acceptMortar(newMortar);
 		cont.getMag().getLastTube().mortar.mortarListener.setMortar(newMortar);
@@ -42,8 +42,8 @@ public class WelcomeSocket implements Runnable {
 		new Thread(cont.getMag().getLastTube().mortar.getMortarListener())
 				.start();
 		this.cont.ThreadCount++; // TODO Lock this. Shared resource
-		System.out.println("Rotating Magazine once");
-		cont.rotateMagazine("301");
+		//System.out.println("Rotating Magazine once");
+		//cont.rotateMagazine("301");
 	}
 
 	public void run() {

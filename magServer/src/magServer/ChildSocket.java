@@ -13,6 +13,7 @@ class ChildSocket implements Runnable {
 	Socket dSock;
 	PrintWriter os;
 	BufferedReader is;
+	boolean hasData = false;
 
 	// private final ReentrantLock lock = new ReentrantLock();
 
@@ -34,32 +35,40 @@ class ChildSocket implements Runnable {
 
 	public void sendToSocket(String message){
 		System.out.println("Sending through Socket...");
-		os.println(message);
+		os.print(message);
 		os.flush();
 		System.out.println("Message Sent");
 	}
 
 	public void run() {
 		System.out.println("Sending Mortar " + this.mortar.ID + " it's Identity");
-		sendToSocket("0" + this.mortar.ID + System.getProperty("line.separator")); // Send just initialized mortar it's ID
+		// Send just initialized mortar it's ID
+		sendToSocket("0" + this.mortar.ID); 
+		//Send mortar population message to tablet. Use tube position instead of mortar ID.
+		this.mortar.cont.getTablet().tabletListener.sendToSocket("00");
+		//this.mortar.cont.getTablet().tabletListener.sendToSocket("0" + this.mortar.getPos() + System.getProperty("line.separator"));
+		String read = "";
 		while (true) {
-			String read = "";
 			try {
 				read = is.readLine();
+				
 				if (read == null) {
 					// This block is a dead end statement to keep the
 					// server from interpreting an empty buffered reader as
 					// constant null messages
+					System.out.println("null");
 				} else if (read.equals("closeme")) {
 					System.out.println("Client closed connection");
 					break;
 				} else if (read == "") {
-					System.out
-							.println("Receieved an empty string; Tossing it.");
+					System.out.println("Receieved an empty string; Tossing it.");
 				} else {
 					System.out.println("Received Message!");
 					System.out.println("Updating Mortar " + this.mortar.ID);
 					mortar.receiveData(read);
+				}
+				if (hasData == true){
+					sendToSocket(this.mortar.makeMessage() + System.getProperty("line.separator"));
 				}
 				Thread.sleep(10);
 			} catch (IOException | InterruptedException e) {

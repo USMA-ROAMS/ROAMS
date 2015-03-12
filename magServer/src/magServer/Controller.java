@@ -126,6 +126,10 @@ class Controller {
 	public Magazine getMag() {
 		return this.mag;
 	}
+	
+	public Tablet getTablet() {
+		return this.tablet;
+	}
 
 	public void fire() {
 		// sends fire signal
@@ -190,14 +194,15 @@ class Controller {
 	public void updateMortar(String ID, String fuze, String gps, String elev) { // takes message from Tablet to mortar, then updates actual mortar
 		boolean success = false;
 		System.out.println("Retrieving mortar object for mortar ID: " + ID + "...");
-		for (int i = 0; i < this.mag.capacity-1; i++) {
+		for (int i = 0; i < this.mag.capacity; i++) {
 			Tube currTube = this.getMag().getTubes().get(i);
 			if (currTube != null){
 				if(currTube.MID.equals(ID)) {
 					System.out.println("... Got object for Mortar ID: " + ID + ".");
 					currTube.getMortar().updateSelf(ID, fuze, gps, elev);
 					System.out.println("updateSelf called successfully!");
-					currTube.getMortar().sendSelf(currTube.getMortar().makeMessage());
+					//currTube.getMortar().sendSelf(currTube.getMortar().makeMessage() + System.getProperty("line.separator"));
+					currTube.getMortar().getMortarListener().hasData = true;
 					System.out.println("Sent info to mortar!");
 					success = true;
 					break;
