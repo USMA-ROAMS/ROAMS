@@ -35,28 +35,36 @@ class ChildSocket implements Runnable {
 
 	public void sendToSocket(String message){
 		System.out.println("Sending through Socket...");
-		os.print(message);
-		os.flush();
+		os.println(message);
+		//os.flush();
 		System.out.println("Message Sent");
 	}
 
 	public void run() {
 		System.out.println("Sending Mortar " + this.mortar.ID + " it's Identity");
 		// Send just initialized mortar it's ID
-		sendToSocket("0" + this.mortar.ID); 
+		sendToSocket("0" + this.mortar.ID+System.getProperty("line.separator")); 
 		//Send mortar population message to tablet. Use tube position instead of mortar ID.
-		this.mortar.cont.getTablet().tabletListener.sendToSocket("00");
+		this.mortar.cont.getTablet().tabletListener.sendToSocket(this.mortar.getID());
 		//this.mortar.cont.getTablet().tabletListener.sendToSocket("0" + this.mortar.getPos() + System.getProperty("line.separator"));
 		String read = "";
 		while (true) {
+			System.out.println("loop");
 			try {
-				read = is.readLine();
 				
+				if (hasData == true){
+					sendToSocket(this.mortar.makeMessage() + System.getProperty("line.separator"));
+					hasData = false;
+				} 
+				else { 
+					sendToSocket("?"+this.mortar.getID()+System.getProperty("line.separator"));
+				}
+				
+				read = is.readLine();
 				if (read == null) {
 					// This block is a dead end statement to keep the
 					// server from interpreting an empty buffered reader as
 					// constant null messages
-					System.out.println("null");
 				} else if (read.equals("closeme")) {
 					System.out.println("Client closed connection");
 					break;
@@ -67,10 +75,8 @@ class ChildSocket implements Runnable {
 					System.out.println("Updating Mortar " + this.mortar.ID);
 					mortar.receiveData(read);
 				}
-				if (hasData == true){
-					sendToSocket(this.mortar.makeMessage() + System.getProperty("line.separator"));
-				}
-				Thread.sleep(10);
+				
+				Thread.sleep(20);
 			} catch (IOException | InterruptedException e) {
 				System.out.println("Failed to read.");
 				e.printStackTrace();
