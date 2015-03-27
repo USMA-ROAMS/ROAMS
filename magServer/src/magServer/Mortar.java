@@ -139,13 +139,18 @@ class Mortar { // need function for after the mortar leaves
 	// send message back to mortar that is ID +" acknowledge"
 	public void receiveData(String message) {
 		System.out.println(message);
-		if (message.substring(0, 1).equals("1")) {
-			receiveIAm(message);
-		} else if (message.substring(0, 1).equals("!")) {
-			System.out.println("Mortar " + message.substring(1, 2) + " ack'd");
-			ackCount = 0;
-		} else {
-			System.out.println("Don't know what to do with this message.");
+		if (message.equals("")||message==null){
+			System.out.println("Recieved an empty message from round...");
+		}
+		else{
+			if (message.substring(0, 1).equals("1")) {
+				receiveIAm(message);
+			} else if (message.substring(0, 1).equals("!")) {
+				System.out.println("Mortar " + message.substring(1, 2) + " ack'd");
+				ackCount = 0;
+			} else {
+				System.out.println("Don't know what to do with this message.");
+			}
 		}
 	}
 

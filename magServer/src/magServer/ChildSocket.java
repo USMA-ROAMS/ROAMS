@@ -49,12 +49,12 @@ class ChildSocket implements Runnable {
 		//this.mortar.cont.getTablet().tabletListener.sendToSocket("0" + this.mortar.getPos() + System.getProperty("line.separator"));
 		String read = "";
 		while (true) {
-			System.out.println("loop");
+			//System.out.println("loop");
 			try {
 				
-				if (hasData == true){
-					sendToSocket(this.mortar.makeMessage() + System.getProperty("line.separator"));
-					hasData = false;
+				if (this.hasData == true){
+					sendToSocket("1" + this.mortar.makeMessage() + System.getProperty("line.separator"));
+					this.hasData = false;
 				} 
 				else { 
 					sendToSocket("?"+this.mortar.getID()+System.getProperty("line.separator"));
@@ -76,7 +76,7 @@ class ChildSocket implements Runnable {
 					mortar.receiveData(read);
 				}
 				
-				Thread.sleep(20);
+				Thread.sleep(1000);
 			} catch (IOException | InterruptedException e) {
 				System.out.println("Failed to read.");
 				e.printStackTrace();

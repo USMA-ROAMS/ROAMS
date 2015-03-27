@@ -179,7 +179,8 @@ class Controller {
 	public void incrementID() {
 		int oldIntID = Integer.parseInt(this.nextID);
 		int newIntID = oldIntID + 1;
-		this.nextID = Integer.toString(newIntID);
+		if (newIntID < 10) this.nextID = "0" + Integer.toString(newIntID);
+		else this.nextID = Integer.toString(newIntID);
 	}
 
 	public void setTablet(Tablet newTablet) {
@@ -196,6 +197,8 @@ class Controller {
 		System.out.println("Retrieving mortar object for mortar ID: " + ID + "...");
 		for (int i = 0; i < this.mag.capacity; i++) {
 			Tube currTube = this.getMag().getTubes().get(i);
+			System.out.println("ID: " + ID);
+			System.out.println("MID: " + currTube.MID);
 			if (currTube != null){
 				if(currTube.MID.equals(ID)) {
 					System.out.println("... Got object for Mortar ID: " + ID + ".");
