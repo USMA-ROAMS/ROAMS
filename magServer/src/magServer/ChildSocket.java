@@ -34,10 +34,7 @@ class ChildSocket implements Runnable {
 	}
 
 	public void sendToSocket(String message){
-		System.out.println("Sending through Socket...");
 		os.println(message);
-		//os.flush();
-		System.out.println("Message Sent");
 	}
 
 	public void run() {
@@ -45,16 +42,17 @@ class ChildSocket implements Runnable {
 		// Send just initialized mortar it's ID
 		sendToSocket("0" + this.mortar.ID+System.getProperty("line.separator")); 
 		//Send mortar population message to tablet. Use tube position instead of mortar ID.
-		this.mortar.cont.getTablet().tabletListener.sendToSocket(this.mortar.getID());
+		if (this.mortar.cont.getTablet() != null) this.mortar.cont.getTablet().getListener().sendToSocket(this.mortar.getID());
+		else this.mortar.cont.dataForTablet = true;
 		//this.mortar.cont.getTablet().tabletListener.sendToSocket("0" + this.mortar.getPos() + System.getProperty("line.separator"));
 		String read = "";
 		while (true) {
-			//System.out.println("loop");
 			try {
 				
-				if (this.hasData == true){
+				if (this.mortar.getData() == true){
+					System.out.println("Sending data message to round...");
 					sendToSocket("1" + this.mortar.makeMessage() + System.getProperty("line.separator"));
-					this.hasData = false;
+					this.mortar.setData(false);
 				} 
 				else { 
 					sendToSocket("?"+this.mortar.getID()+System.getProperty("line.separator"));
@@ -71,12 +69,10 @@ class ChildSocket implements Runnable {
 				} else if (read == "") {
 					System.out.println("Receieved an empty string; Tossing it.");
 				} else {
-					System.out.println("Received Message!");
-					System.out.println("Updating Mortar " + this.mortar.ID);
 					mortar.receiveData(read);
 				}
 				
-				Thread.sleep(1000);
+				Thread.sleep(200);
 			} catch (IOException | InterruptedException e) {
 				System.out.println("Failed to read.");
 				e.printStackTrace();
@@ -84,11 +80,9 @@ class ChildSocket implements Runnable {
 		}
 
 		try {
-			//TODO Close Print Writer
 			this.dSock.close();
 			Thread.currentThread().interrupt();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

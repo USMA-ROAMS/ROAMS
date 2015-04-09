@@ -21,6 +21,10 @@ class Magazine {
 	public Tube getLastTube() {
 		return this.tubes.get(capacity - 1);
 	}
+	
+	public Tube getFirstTube() {
+		return this.tubes.get(0);
+	}
 
 	public ArrayList<Tube> getTubes() {
 		return this.tubes;

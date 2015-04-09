@@ -42,8 +42,6 @@ public class WelcomeSocket implements Runnable {
 		new Thread(cont.getMag().getLastTube().mortar.getMortarListener())
 				.start();
 		this.cont.ThreadCount++; // TODO Lock this. Shared resource
-		//System.out.println("Rotating Magazine once");
-		//cont.rotateMagazine("301");
 	}
 
 	public void run() {
@@ -59,10 +57,8 @@ public class WelcomeSocket implements Runnable {
 				}
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -71,7 +67,6 @@ public class WelcomeSocket implements Runnable {
 		try {
 			this.sock.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Thread.currentThread().interrupt();

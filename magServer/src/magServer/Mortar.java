@@ -16,12 +16,16 @@ class Mortar { // need function for after the mortar leaves
 	int ackCount = 0;
 	// private final ReentrantLock lock = new ReentrantLock();
 	Controller cont;
+	boolean hasData = false;
 
 	// When instantiating a mortar, an ID is needed
 	public Mortar(String newID) {
 		ID = newID;
 	}
 
+	public void setData(boolean status){this.hasData=status;}
+	public boolean getData(){return this.hasData;}
+	
 	public void init(Controller newCont, Socket clientSocket, String ID, String magPos) {
 		mortarListener.setMortar(this);
 		try {
@@ -123,7 +127,6 @@ class Mortar { // need function for after the mortar leaves
 	}
 
 	public void sendSelf(String message) {
-		System.out.println(message);
 		this.mortarListener.sendToSocket(message);
 	}
 
@@ -138,7 +141,6 @@ class Mortar { // need function for after the mortar leaves
 
 	// send message back to mortar that is ID +" acknowledge"
 	public void receiveData(String message) {
-		System.out.println(message);
 		if (message.equals("")||message==null){
 			System.out.println("Recieved an empty message from round...");
 		}
@@ -146,7 +148,6 @@ class Mortar { // need function for after the mortar leaves
 			if (message.substring(0, 1).equals("1")) {
 				receiveIAm(message);
 			} else if (message.substring(0, 1).equals("!")) {
-				System.out.println("Mortar " + message.substring(1, 2) + " ack'd");
 				ackCount = 0;
 			} else {
 				System.out.println("Don't know what to do with this message.");
@@ -157,7 +158,6 @@ class Mortar { // need function for after the mortar leaves
 	public void receiveIAm(String newMessage) { // update self based on message
 		updateSelf(newMessage.substring(1, 3), newMessage.substring(3, 4),
 				newMessage.substring(4, 18), newMessage.substring(18, 23));
-		// TODO Implement this when new tablet interface completed.
 		// cont.updateTablet(newMessage);
 	}
 }

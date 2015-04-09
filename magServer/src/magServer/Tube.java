@@ -17,6 +17,14 @@ class Tube extends Magazine {
 	public void setPos(int newPos) {
 		this.magPos = newPos;
 	}
+	
+	public void setMIDNull(){
+		this.MID = "--";
+	}
+	
+	public void setMortarNull(){
+		this.mortar = null;
+	}
 
 	public int getPos() {
 		return this.magPos;

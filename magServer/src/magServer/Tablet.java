@@ -16,6 +16,11 @@ class Tablet {
 		tabletListener.acceptSocket(tabletSocket, this);
 		this.cont = newCont;
 		this.cont.setTablet(this);
+		if(this.cont.dataForTablet = true) {
+			System.out.println("Mortars already exists... sending them to tablet");
+			this.cont.sendExistingMortars();
+			System.out.println("Mortars sent to tablet");
+		}
 	}
 
 	public void send(String message) {
@@ -29,7 +34,6 @@ class Tablet {
 	public void receiveData(String message) { // gets data from actual tablet,
 												// sends up to controller to
 												// update mortar object
-		System.out.println(message);
 		if (message.substring(0, 1).equals("1")) {
 			String ID = message.substring(1, 3);
 			String fuze = message.substring(3, 4);
@@ -37,8 +41,12 @@ class Tablet {
 			String elev = message.substring(18, 22);
 			cont.updateMortar(ID, fuze, gps, elev);
 		}
-		if (message.substring(0, 1).equals("3")) {
+		else if (message.substring(0, 1).equals("3")) {
 			cont.rotateMagazine(message);
+			cont.rotatePhysicalMagazine(message.substring(1,2), message.substring(2,3));
+		} else if (message.substring(0,1).equals("!")){
+		} else if (message.substring(0,1).equals("4")){
+			cont.fire(message.substring(1,3));
 		} else
 			System.out.println("Don't know what to do with this message");
 	}

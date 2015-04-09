@@ -32,12 +32,12 @@ class TabletChildSocket implements Runnable {
 	}
 
 	public void run() {
-		//sendToSocket("1");
 		String read = "";
 		while (true) {
 			try {
+				sendToSocket("?");
+				
 				read = is.readLine();
-
 				if (read == null) {
 					// System.out.println("Null string.");
 				} else if (read.equals("closeme")) {
@@ -45,16 +45,11 @@ class TabletChildSocket implements Runnable {
 					break;
 				} else if (read == "") {
 					System.out.println("Empty String??");
-				} else {
-					System.out.println("Received Message!");
-					System.out.println("Message Recieved was '" + read + "'");
-					System.out.println("Updating Tablet ");
-					
+				} else {					
 					tablet.receiveData(read);
 				}
-				Thread.sleep(20);
+				Thread.sleep(200);
 			} catch (IOException | InterruptedException e) {
-				// TODO Auto-generated catch block
 				System.out.println("Failed to read.");
 				e.printStackTrace();
 			}
@@ -64,7 +59,6 @@ class TabletChildSocket implements Runnable {
 			this.dSock.close();
 			Thread.currentThread().interrupt();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

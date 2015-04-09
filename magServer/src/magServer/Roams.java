@@ -16,7 +16,7 @@ public class Roams {
 		System.out.println("Controller Initialized");
 		
 		Scanner reader = new Scanner(System.in);
-		List<String> commands = Arrays.asList("QQ (QUIT)", "HP (HELP)", "TS (TEST)", "CF (CHANGE FUZE)");
+		List<String> commands = Arrays.asList("QQ (QUIT)", "HP (HELP)", "TS (TEST)", "CF (CHANGE FUZE)", "RT (ROTATE)");
 		while (true) {
 			String rawCommand = reader.nextLine();
 			if (rawCommand.equals("") || rawCommand == null){
@@ -35,24 +35,23 @@ public class Roams {
 					for (String l : commands) {
 						System.out.println(l);
 					}
-				}
-					else if (command.substring(0, 2).equals("CF")){
-						String mor = command.substring(3, 5);
-						String set = command.substring(6);
+				} else if (command.substring(0, 2).equals("CF")){
+					String mor = command.substring(3, 5);
+					String set = command.substring(6);
 						
-						if (Integer.parseInt(set) < 0 || Integer.parseInt(set) > 4){
-							System.out.println("Invalid Fuze setting!");
-						}
-						else{
-							System.out.println("Sending mortar " + mor + " a fuze setting of " + set + ".");
-							controller.updateMortar(mor, set, "AA000000000000", "00000");
-						}
+					if (Integer.parseInt(set) < 0 || Integer.parseInt(set) > 4){
+						System.out.println("Invalid Fuze setting!");
 					}
+					else{
+						System.out.println("Sending mortar " + mor + " a fuze setting of " + set + ".");
+						controller.updateMortar(mor, set, "AA000000000000", "00000");
+					}
+				} else if (command.substring(0,2).equals("RT")){
+					controller.rotatePhysicalMagazine("0","2");
+				}
 				} 
 				else {
-					System.out
-							.println(rawCommand
-									+ " is not a recognized command or server function.");
+					System.out.println(rawCommand + " is not a recognized command or server function.");
 				}
 			}
 		}

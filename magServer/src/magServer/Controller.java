@@ -1,31 +1,39 @@
 package magServer;
 
 import java.io.IOException;
-
 //import java.util.concurrent.locks.ReentrantLock;
 
 class Controller {
-	Tablet tablet;
-	private Magazine mag;
-	WelcomeSocket mortarListener;
-	TabletWelcomeSocket tabletListener;
-	public int ThreadCount;
+	Tablet 					tablet;
+	magMotor 				magMotor;
+	private Magazine 		mag;
+	WelcomeSocket 			mortarListener;
+	TabletWelcomeSocket 	tabletListener;
+	public int 				ThreadCount;
 	// private final ReentrantLock lock = new ReentrantLock();
-	public String nextID = "00";
-	String mortarAddr =  "192.168.42.1";
-	String tabletAddr =  "192.168.42.1";
-	//String mortarAddr = "127.0.0.1";
-	//String tabletAddr = "127.0.0.1";
+	public String 			nextID = "00";
+	String 					mortarAddr =  "192.168.42.1";
+	String 					tabletAddr =  "192.168.42.1";
+	public boolean			dataForTablet = false;
+	RGBStatusLight			statusLED; 
 
 	// Initialize all elements required for controller operation
 	public void init() throws IOException {
 
 		// Instantiate and initialize new Magazine object
+		System.out.println("Intializing status indicator...");
+		this.statusLED = new RGBStatusLight();
+		statusLED.init();
+		System.out.println("Status light initialized");
+		this.statusLED.changeLight("110"); //change light to yellow
 		System.out.println("Initializing Magazine Object");
 		this.mag = new Magazine();
 		mag.init(5); // Integer passed as parameter here dictates magazine size.
 		System.out.println("Magazine Object Initialized");
-
+		System.out.println("Intializing Magazine Motor");
+		this.magMotor = new magMotor();
+		magMotor.init();
+		System.out.println("Magazine Motor Intitialized.");
 		// Begin process to create welcome socket and bind it to desired host
 		// and port
 		int timeoutCounter = 0; // initialize a counter to track number of
@@ -53,23 +61,14 @@ class Controller {
 			} catch (java.net.BindException e) {
 				timeoutCounter++;
 				System.out.println("Couldn't bind to " + mortarAddr);
-				System.out.println("Failed " + Integer.toString(timeoutCounter)
-						+ " times.");
-
-				// TODO Figure out why Sleep statement requires Interrupted
-				// Exception blocks
+				System.out.println("Failed " + Integer.toString(timeoutCounter) + " times.");
+				
 				try {
 					Thread.sleep(3000);
 				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
-		}
-
-		if (timeoutCounter >= 3) {
-			// TODO Implement code to kill the server neatly if the attempted
-			// bind fails 3 times
 		}
 
 		while (timeoutCounter < 3) {
@@ -91,17 +90,11 @@ class Controller {
 				try {
 					Thread.sleep(3000);
 				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
 		}
-
-		if (timeoutCounter >= 3) {
-			// TODO Implement code to kill the server neatly if the attempted
-			// bind times out 3 times
-		}
-
+		this.statusLED.changeLight("010");
 	}
 
 	public void rotateMagazine(String rotMessage) {
@@ -131,19 +124,22 @@ class Controller {
 		return this.tablet;
 	}
 
-	public void fire() {
+	public void fire(String ID) {
 		// sends fire signal
-		rotateMagazine("301");
+		System.out.println("Recieved signal to fire round " + ID);
+		Tube tube = this.mag.getFirstTube();
+		if (tube != null){
+			if (tube.getMortar().getID().equals(ID)){
+				tube.setMortarNull();
+				tube.setMIDNull();
+			}
+			else{System.out.println("Mortar ID requested to be fired did not match motar ID in firing tube. Abandoning Fire.");}		
+		}
 	}
 
 	public void updateTablet(String newMessage) { // sends data from magazine to
-													// tablet to send
-		// TODO Following line needs implementation
+												  // tablet to send
 		tablet.send(newMessage);
-	}
-
-	public void sendRotSignal() {
-		// TODO Implement method of sending PWM signal through java here.
 	}
 
 	public void closeGracefully() {
@@ -205,7 +201,7 @@ class Controller {
 					currTube.getMortar().updateSelf(ID, fuze, gps, elev);
 					System.out.println("updateSelf called successfully!");
 					//currTube.getMortar().sendSelf(currTube.getMortar().makeMessage() + System.getProperty("line.separator"));
-					currTube.getMortar().getMortarListener().hasData = true;
+					currTube.getMortar().setData(true);
 					System.out.println("Sent info to mortar!");
 					success = true;
 					break;
@@ -216,4 +212,16 @@ class Controller {
 		
 		if (!success) System.out.println("Couldn't retrieve mortar object for Mortar ID: " + ID + ".");
 	}
+	
+	public void rotatePhysicalMagazine(String dir, String rots){
+		this.magMotor.rotatePhysicalMagazine(dir, rots);
+	}
+	
+	public void sendExistingMortars(){
+		for (Tube tube : this.mag.tubes) {
+			Mortar currMor = tube.getMortar();
+			if(currMor != null) {updateTablet("5"+Integer.toString(tube.getPos())+currMor.makeMessage());}
+		}
+	}
+
 }
