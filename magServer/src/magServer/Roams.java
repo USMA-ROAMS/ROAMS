@@ -16,7 +16,7 @@ public class Roams {
 		System.out.println("Controller Initialized");
 		
 		Scanner reader = new Scanner(System.in);
-		List<String> commands = Arrays.asList("QQ (QUIT)", "HP (HELP)", "TS (TEST)", "CF (CHANGE FUZE)", "RT (ROTATE)");
+		List<String> commands = Arrays.asList("QQ (QUIT)", "HP (HELP)", "TS (TEST)", "CF (CHANGE FUZE)", "RT (ROTATE)", "CL <RGB> (CHANGE LIGHT)","RS (RESET MAGAZINE)");
 		while (true) {
 			String rawCommand = reader.nextLine();
 			if (rawCommand.equals("") || rawCommand == null){
@@ -47,7 +47,11 @@ public class Roams {
 						controller.updateMortar(mor, set, "AA000000000000", "00000");
 					}
 				} else if (command.substring(0,2).equals("RT")){
-					controller.rotatePhysicalMagazine("0","2");
+					controller.rotatePhysicalMagazine("0","1");
+				} else if (command.substring(0,2).equals("CL")){
+					controller.changeStatusLight(command.substring(3,6));
+				} else if (command.substring(0,2).equals("RS")){
+					controller.clearMagazine();
 				}
 				} 
 				else {

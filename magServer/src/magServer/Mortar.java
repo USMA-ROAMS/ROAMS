@@ -23,10 +23,16 @@ class Mortar { // need function for after the mortar leaves
 		ID = newID;
 	}
 
-	public void setData(boolean status){this.hasData=status;}
-	public boolean getData(){return this.hasData;}
-	
-	public void init(Controller newCont, Socket clientSocket, String ID, String magPos) {
+	public void setData(boolean status) {
+		this.hasData = status;
+	}
+
+	public boolean getData() {
+		return this.hasData;
+	}
+
+	public void init(Controller newCont, Socket clientSocket, String ID,
+			String magPos) {
 		mortarListener.setMortar(this);
 		try {
 			mortarListener.acceptSocket(clientSocket);
@@ -61,7 +67,7 @@ class Mortar { // need function for after the mortar leaves
 	public String getPos() {
 		return this.magPos;
 	}
-	
+
 	public void setFuze(String newFuze) {
 		try {
 			if (Integer.parseInt(newFuze) > 5) {
@@ -131,8 +137,10 @@ class Mortar { // need function for after the mortar leaves
 	}
 
 	// Takes info from controller, changes data on mortar
-	public void updateSelf(String newID, String newFuze, String newGps, String newElev) {
-		System.out.println(this.ID+this.fuze+this.gps+this.elev + " to " + newID+newFuze+newGps+newElev);
+	public void updateSelf(String newID, String newFuze, String newGps,
+			String newElev) {
+		System.out.println(this.ID + this.fuze + this.gps + this.elev + " to "
+				+ newID + newFuze + newGps + newElev);
 		this.setID(newID);
 		this.setFuze(newFuze);
 		this.setGps(newGps);
@@ -141,10 +149,9 @@ class Mortar { // need function for after the mortar leaves
 
 	// send message back to mortar that is ID +" acknowledge"
 	public void receiveData(String message) {
-		if (message.equals("")||message==null){
+		if (message.equals("") || message == null) {
 			System.out.println("Recieved an empty message from round...");
-		}
-		else{
+		} else {
 			if (message.substring(0, 1).equals("1")) {
 				receiveIAm(message);
 			} else if (message.substring(0, 1).equals("!")) {

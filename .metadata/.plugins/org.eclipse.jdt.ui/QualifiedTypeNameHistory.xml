@@ -10,4 +10,13 @@
 <fullyQualifiedTypeName name="java.net.Socket"/>
 <fullyQualifiedTypeName name="java.util.Scanner"/>
 <fullyQualifiedTypeName name="java.io.PrintWriter"/>
+<fullyQualifiedTypeName name="com.pi4j.wiringpi.SoftPwm"/>
+<fullyQualifiedTypeName name="com.pi4j.io.gpio.GpioPinDigitalInput"/>
+<fullyQualifiedTypeName name="com.pi4j.io.gpio.PinPullResistance"/>
+<fullyQualifiedTypeName name="com.pi4j.wiringpi.Gpio"/>
+<fullyQualifiedTypeName name="com.pi4j.io.gpio.GpioController"/>
+<fullyQualifiedTypeName name="com.pi4j.io.gpio.GpioFactory"/>
+<fullyQualifiedTypeName name="com.pi4j.io.gpio.GpioPinDigitalOutput"/>
+<fullyQualifiedTypeName name="com.pi4j.io.gpio.RaspiPin"/>
+<fullyQualifiedTypeName name="com.pi4j.io.gpio.PinState"/>
 </qualifiedTypeNameHistroy>

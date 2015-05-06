@@ -1,0 +1,87 @@
+package magServer;
+
+import com.pi4j.io.gpio.GpioController;
+import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.GpioPinDigitalOutput;
+import com.pi4j.io.gpio.PinState;
+import com.pi4j.io.gpio.RaspiPin;
+import com.pi4j.wiringpi.Gpio;
+
+public class RGBStatusLight {
+	// create gpio controller
+    GpioController gpio;
+
+    GpioPinDigitalOutput greenPin;
+    GpioPinDigitalOutput bluePin;
+    GpioPinDigitalOutput redPin; 
+    
+    /*
+     * Red     = 100
+     * Green   = 010
+     * Blue    = 001
+     * yellow  = 110
+     * cyan    = 011
+     * magenta = 101
+     * white   = 111
+     */
+
+    public void init(){
+    	Gpio.wiringPiSetup();
+    	gpio = GpioFactory.getInstance();
+    	greenPin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_08, "green", PinState.LOW);
+    	bluePin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_09, "blue",  PinState.LOW);
+    	redPin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_11, "red",   PinState.LOW);
+    	changeLight("100");
+    }
+    
+    public void changeLight(String color){
+    	System.out.println("Changing LED Color to... ");
+    	System.out.println(color);
+    	switch (color) {
+    	case "000":
+    		System.out.println("...white");
+    	case "100": 
+    		System.out.println("...red");
+    		this.redPin.high();
+    		this.greenPin.low();
+    		this.bluePin.low();
+    		break;
+    	case "010":
+    		System.out.println("...green");
+    		this.redPin.low();
+    		this.greenPin.high();
+    		this.bluePin.low();
+    		break;
+    	case "001":
+    		System.out.println("...blue");
+    		this.redPin.low();
+    		this.greenPin.low();
+    		this.bluePin.high();
+    		break;
+    	case "110":
+    		System.out.println("...yellow");
+    		this.redPin.high();
+    		this.greenPin.high();
+    		this.bluePin.low();
+    		break;
+    	case "011":
+    		System.out.println("...cyan");
+    		this.redPin.low();
+    		this.greenPin.high();
+    		this.bluePin.high();
+			break;
+    	case "101":
+    		System.out.println("...magenta");
+    		this.redPin.high();
+    		this.greenPin.low();
+    		this.bluePin.high();
+    		break;
+    	case "111":
+    		System.out.println("...white");
+    		this.redPin.high();
+    		this.greenPin.high();
+    		this.bluePin.high();
+    		break;
+    	}
+    }
+}

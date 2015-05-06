@@ -94,7 +94,6 @@ class Controller {
 				}
 			}
 		}
-		this.statusLED.changeLight("010");
 	}
 
 	public void rotateMagazine(String rotMessage) {
@@ -132,6 +131,7 @@ class Controller {
 			if (tube.getMortar().getID().equals(ID)){
 				tube.setMortarNull();
 				tube.setMIDNull();
+				this.statusLED.blinkRed();
 			}
 			else{System.out.println("Mortar ID requested to be fired did not match motar ID in firing tube. Abandoning Fire.");}		
 		}
@@ -224,4 +224,15 @@ class Controller {
 		}
 	}
 
+	public void changeStatusLight(String light){
+		if(light.equals("666")) this.statusLED.danceParty();
+		else this.statusLED.changeLight(light);
+	}
+	
+	public void clearMagazine(){
+		System.out.println("Rebuilding empty magazine...");
+		this.mag = new Magazine();
+		mag.init(5);
+		System.out.println("Magazine is now empty.");
+	}
 }

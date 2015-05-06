@@ -1,0 +1,42 @@
+package magServer;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+
+public class Roams {
+	
+	public static void main(String[] args) throws IOException {
+		System.out.println("Making Controller");
+		Controller controller = new Controller();
+		System.out.println("Controller made");
+		System.out.println("Initializing Controller");
+		controller.init();
+		System.out.println("Controller Initialized");
+		
+		
+		Scanner reader = new Scanner(System.in);
+		List<String> commands = Arrays.asList("quit", "help", "test");
+		while(true){
+			String rawCommand = reader.nextLine();
+			if(rawCommand.substring(0,1).equals("/")){
+				String command = rawCommand.substring(1,rawCommand.length());
+				if (command.equals("quit")){
+					System.out.println("Operator initiated server shutdown...");
+				}
+				else if (command.equals("test")){
+					System.out.println("This is the test text!!!");
+				}
+				else if (command.equals("help")){
+					System.out.println("The following commands are available for use:");
+					for (String l : commands){
+						System.out.println(l);
+					}
+				}
+				else {System.out.println(command + " is not a recognized command or server function.");}
+			}	
+		}
+	}
+}
